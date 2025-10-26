@@ -8,10 +8,5 @@
   },
   "keywords": [],
   "author": "Diego Sanchez",
-  "license": "ISC",
-  "pnpm": {
-    "overrides": {
-      "vite": "npm:rolldown-vite@7.1.14"
-    }
-  }
+  "license": "ISC"
 }
