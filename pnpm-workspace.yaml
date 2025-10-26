@@ -1,0 +1,5 @@
+minimumReleaseAge: 60
+
+packages:
+  - "backend"
+  - "frontend"
