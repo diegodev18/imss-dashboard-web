@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   preview: {
     host: "0.0.0.0",
-    allowedHosts: ["imss.dukehomelab.site"],
+    allowedHosts: [process.env.ORIGIN_DOMAIN ?? "imss.dukehomelab.site"],
     port: 4173,
   },
 });
