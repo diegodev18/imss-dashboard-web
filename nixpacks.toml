@@ -13,3 +13,4 @@ cmd = "pnpm run start"
 
 [variables]
 NIXPACKS_PATH = "/app"
+NODE_ENV = "production"
