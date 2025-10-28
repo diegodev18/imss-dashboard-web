@@ -5,6 +5,12 @@ import { COOKIE_OPTIONS, JWT_SECRET } from "@/config";
 import { LoginReq } from "@/types";
 
 export const login = (req: Request<0, 0, LoginReq>, res: Response) => {
+  if (req.cookies.access_token) {
+    return res
+      .status(400)
+      .json({ message: "User is already logged in. Please log out first." });
+  }
+
   if (!(req.body as unknown)) {
     return res.status(400).json({ message: "Body is required" });
   } else if (!req.body.username || !req.body.password) {
