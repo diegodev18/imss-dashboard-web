@@ -25,6 +25,34 @@ export const login = (req: Request<0, 0, LoginReq>, res: Response) => {
     .json({ message: "Login successful" });
 };
 
-export const getSession = (req: Request, res: Response) => {};
+export const getSession = (req: Request, res: Response) => {
+  const accessToken = req.cookies.access_token as string | undefined;
+
+  if (!accessToken) {
+    return res.status(404).json({ message: "No access_token found at cookie" });
+  }
+
+  try {
+    const verified = jwt.verify(accessToken, JWT_SECRET);
+
+    const data: LoginReq =
+      typeof verified === "string"
+        ? (JSON.parse(verified) as LoginReq)
+        : (verified as unknown as LoginReq);
+
+    const sanitizedToken = {
+      password: data.password,
+      username: data.username,
+    };
+
+    return res.status(200).json({ session: sanitizedToken });
+  } catch (err) {
+    console.error("Error getting session by 2 user:", err);
+
+    return res.status(400).json({
+      message: "Didnt validate the access_token",
+    });
+  }
+};
 
 export const logout = (req: Request, res: Response) => {};
