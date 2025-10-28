@@ -1,30 +1,26 @@
-import { useState } from "react";
-import reactLogo from "../assets/react.svg";
-import viteLogo from "/vite.svg";
+import TelegramIcon from "../components/icons/telegram";
 
 export default function Home() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} alt="Vite logo" />
+      <main className="h-svh w-screen flex flex-col items-center justify-center gap-1 bg-gray-800 text-white">
+        <h1 className="text-yellow-300 text-[1.92rem] font-semibold">
+          Bienvenido a IMSS Dashboard
+        </h1>
+        <p>Esta es una aplicación de ejemplo utilizando Vite y React.</p>
+        <a
+          className="flex items-center gap-1 border-b border-b-transparent px-2 hover:border-b-blue-500 transition duration-300"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://t.me/IeuImsBot"
+        >
+          <span className="opacity-70">¡Prueba nuestro</span>
+          <span className="font-semibold opacity-100">
+            Asistente de Telegram!
+          </span>
+          <TelegramIcon className="h-8" />
         </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} alt="React logo" />
-        </a>
-      </div>
-      <h1>Home</h1>
-      <div>
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p>Click on the Vite and React logos to learn more</p>
+      </main>
     </>
   );
 }
