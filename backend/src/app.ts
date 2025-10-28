@@ -15,6 +15,8 @@ const router = Router();
 
 router.use("/auth", authRouter);
 
+router.get("/", (_, r) => r.status(200).json({ message: "API is running." }));
+
 app.use("/api", router);
 
 app.listen(SERVER_PORT, (err) => {
