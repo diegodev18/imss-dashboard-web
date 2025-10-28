@@ -2,12 +2,16 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
 import { COOKIE_OPTIONS, JWT_SECRET } from "@/config";
+import { LoginReq } from "@/types";
 
-export const login = (req: Request, res: Response) => {
-  const { password, username } = req.body as {
-    password: string;
-    username: string;
-  };
+export const login = (req: Request<0, 0, LoginReq>, res: Response) => {
+  if (!req.body.username || !req.body.password) {
+    return res
+      .status(400)
+      .json({ message: "Username and password are required" });
+  }
+
+  const { password, username } = req.body;
 
   const token = jwt.sign({ password, username }, JWT_SECRET, {
     expiresIn: "7d",
