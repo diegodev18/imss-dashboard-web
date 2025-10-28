@@ -4,9 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm-run-all --parallel build:*",
+    "build:frontend": "pnpm --filter frontend run build",
+    "build:backend": "pnpm --filter backend run build",
+    "dev": "npm-run-all --parallel dev:*",
+    "dev:frontend": "pnpm --filter frontend run dev",
+    "dev:backend": "pnpm --filter backend run dev",
+    "start": "npm-run-all --parallel start:*",
+    "start:frontend": "pnpm --filter frontend run start",
+    "start:backend": "pnpm --filter backend run start"
   },
   "keywords": [],
   "author": "Diego Sanchez",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "npm-run-all": "4.1.5"
+  }
 }
