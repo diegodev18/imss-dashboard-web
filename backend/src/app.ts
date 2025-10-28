@@ -1,9 +1,13 @@
+import cookieParser from "cookie-parser";
 import express, { Router } from "express";
 
 import { SERVER_PORT } from "@/config";
 import authRouter from "@/routes/auth.route";
 
 const app = express();
+
+app.use(express.json());
+app.use(cookieParser());
 
 const router = Router();
 
