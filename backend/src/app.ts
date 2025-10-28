@@ -21,7 +21,7 @@ app.listen(SERVER_PORT, (err) => {
   } else {
     const portStr = SERVER_PORT.toString();
     const httpScheme = PRODUCTION_ENV ? "https" : "http";
-    const url = `${httpScheme}://${ORIGIN_DOMAIN}:${portStr}`;
+    const url = `${httpScheme}://${ORIGIN_DOMAIN}${PRODUCTION_ENV ? "/api" : `:${portStr}`}`;
     console.info(`Server (backend) is running on ${url}.`);
   }
 });
