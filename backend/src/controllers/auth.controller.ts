@@ -55,4 +55,15 @@ export const getSession = (req: Request, res: Response) => {
   }
 };
 
-export const logout = (req: Request, res: Response) => {};
+export const logout = (req: Request, res: Response) => {
+  const accessToken = req.cookies.access_token as string | undefined;
+
+  if (!accessToken) {
+    return res.status(404).json({ message: "No access_token found at cookie" });
+  }
+
+  return res
+    .status(200)
+    .clearCookie("access_token")
+    .json({ message: "Logout successful" });
+};
