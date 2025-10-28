@@ -32,7 +32,7 @@ export const getSessionMiddleware = (
       return;
     }
 
-    req.session.user = { username: data.username };
+    req.session.user = { name: data.username };
   } catch (err) {
     console.error("Error validating session in middleware:", err);
 

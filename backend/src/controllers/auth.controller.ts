@@ -45,7 +45,7 @@ export const getSession = (req: SessionRequest, res: Response) => {
   }
 
   const sanitized = {
-    username: user.username,
+    name: user.name,
   };
 
   return res.status(200).json({ user: sanitized });

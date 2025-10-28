@@ -6,5 +6,5 @@ export interface LoginReq {
 }
 
 export interface SessionRequest extends Request {
-  session?: { user: null | { username: string } };
+  session?: { user: null | { name: string } };
 }
