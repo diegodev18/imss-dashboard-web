@@ -6,10 +6,10 @@ env = { NODE_ENV = "production" }
 cmds = ["pnpm install --frozen-lockfile"]
 
 [phases.build]
-cmds = ["pnpm --filter frontend run build", "pnpm --filter backend run build"]
+cmds = ["pnpm run build"]
 
 [start]
-cmd = "pnpm dlx concurrently 'pnpm --filter backend start' 'pnpm --filter frontend preview'"
+cmd = "pnpm run start"
 
 [variables]
 NIXPACKS_PATH = "/app"
