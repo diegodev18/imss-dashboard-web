@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
 import { COOKIE_OPTIONS, JWT_SECRET } from "@/config";
-import { LoginReq } from "@/types";
+import { LoginReq, SessionRequest } from "@/types";
 
 export const login = (req: Request<0, 0, LoginReq>, res: Response) => {
   if (req.cookies.access_token) {
@@ -31,34 +31,24 @@ export const login = (req: Request<0, 0, LoginReq>, res: Response) => {
     .json({ message: "Login successful" });
 };
 
-export const getSession = (req: Request, res: Response) => {
-  const accessToken = req.cookies.access_token as string | undefined;
-
-  if (!accessToken) {
+export const getSession = (req: SessionRequest, res: Response) => {
+  if (!req.cookies.access_token) {
     return res.status(404).json({ message: "No access_token found at cookie" });
+  } else if (!req.session) {
+    return res.status(404).json({ message: "No session found" });
   }
 
-  try {
-    const verified = jwt.verify(accessToken, JWT_SECRET);
+  const user = req.session.user;
 
-    const data: LoginReq =
-      typeof verified === "string"
-        ? (JSON.parse(verified) as LoginReq)
-        : (verified as unknown as LoginReq);
-
-    const sanitizedToken = {
-      password: data.password,
-      username: data.username,
-    };
-
-    return res.status(200).json({ session: sanitizedToken });
-  } catch (err) {
-    console.error("Error getting session by 2 user:", err);
-
-    return res.status(400).json({
-      message: "Didnt validate the access_token",
-    });
+  if (!user) {
+    return res.status(404).json({ message: "No active session found" });
   }
+
+  const sanitized = {
+    username: user.username,
+  };
+
+  return res.status(200).json({ user: sanitized });
 };
 
 export const logout = (req: Request, res: Response) => {

@@ -2,12 +2,14 @@ import cookieParser from "cookie-parser";
 import express, { Router } from "express";
 
 import { ORIGIN_DOMAIN, PRODUCTION_ENV, SERVER_PORT } from "@/config";
+import { getSessionMiddleware } from "@/middlewares";
 import authRouter from "@/routes/auth.route";
 
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(getSessionMiddleware);
 
 const router = Router();
 
