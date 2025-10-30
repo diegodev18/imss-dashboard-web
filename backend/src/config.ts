@@ -22,8 +22,8 @@ export const SERVER_PORT =
 
 export const COOKIE_OPTIONS = {
   domain: ORIGIN_DOMAIN,
-  httpOnly: true,
+  httpOnly: PRODUCTION_ENV ? true : false,
   maxAge: 7 * 24 * 60 * 60 * 1000,
   sameSite: PRODUCTION_ENV ? "strict" : "lax",
-  secure: true,
+  secure: PRODUCTION_ENV ? true : false,
 } as const;
