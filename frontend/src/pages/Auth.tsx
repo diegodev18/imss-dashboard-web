@@ -6,17 +6,26 @@ export default function Auth() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!username || !password) {
-      setError("Por favor, completa todos los campos.");
-      return;
+      return setError("Por favor, completa todos los campos.");
     }
     setError("");
 
-    console.log("Usuario:", username);
-    console.log("Contraseña:", password);
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+      credentials: "include",
+    });
+    if (!response.ok) {
+      return setError("Error al iniciar sesión. Verifica tus credenciales.");
+    }
+    window.location.href = "/dashboard";
   };
 
   return (
