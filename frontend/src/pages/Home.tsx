@@ -15,7 +15,7 @@ export default function Home() {
           </p>
           <a
             className="px-3 py-1.5 my-3 bg-blue-500 hover:bg-blue-600 rounded-md transition duration-300"
-            href="/dashboard"
+            href="/auth"
           >
             Ve al Panel de Control
           </a>
