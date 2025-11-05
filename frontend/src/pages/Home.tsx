@@ -4,8 +4,8 @@ import SectionContainer from "../components/sectionContainer";
 export default function Home() {
   return (
     <>
-      <main className="h-svh w-screen flex flex-col items-center justify-center gap-1 bg-gray-800 text-white">
-        <SectionContainer>
+      <main>
+        <SectionContainer className="flex flex-col items-center justify-center gap-1 h-svh w-screen">
           <h1 className="text-yellow-300 text-[1.92rem] font-semibold">
             Bienvenido a IMSS Dashboard
           </h1>
@@ -13,7 +13,12 @@ export default function Home() {
             El Panel de Control para la gestión de empleados ante el registro
             del IMSS.
           </p>
-          <a href="">Ve al Panel de Control</a>
+          <a
+            className="px-3 py-1.5 my-3 bg-blue-500 hover:bg-blue-600 rounded-md transition duration-300"
+            href="/dashboard"
+          >
+            Ve al Panel de Control
+          </a>
           <a
             className="flex items-center gap-1 border-b border-b-transparent px-2 hover:border-b-blue-500 transition duration-300"
             target="_blank"
