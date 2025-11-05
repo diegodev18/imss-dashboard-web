@@ -19,16 +19,23 @@ export const login = (req: Request<0, 0, LoginReq>, res: Response) => {
       .json({ message: "Username and password are required" });
   }
 
-  const { password, username } = req.body;
+  try {
+    const { password, username } = req.body;
 
-  const token = jwt.sign({ password, username }, JWT_SECRET, {
-    expiresIn: "7d",
-  });
+    const token = jwt.sign({ password, username }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
 
-  res
-    .status(200)
-    .cookie("access_token", token, COOKIE_OPTIONS)
-    .json({ message: "Login successful" });
+    console.info(`User ${username} logged in.`);
+
+    return res
+      .status(200)
+      .cookie("access_token", token, COOKIE_OPTIONS)
+      .json({ message: "Login successful" });
+  } catch (err) {
+    console.error("Error during login:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 export const getSession = (req: SessionRequest, res: Response) => {
