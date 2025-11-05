@@ -1,7 +1,13 @@
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import express, { Router } from "express";
 
-import { ORIGIN_DOMAIN, PRODUCTION_ENV, SERVER_PORT } from "@/config";
+import {
+  CORS_OPTIONS,
+  ORIGIN_DOMAIN,
+  PRODUCTION_ENV,
+  SERVER_PORT,
+} from "@/config";
 import { getSessionMiddleware } from "@/middlewares";
 import authRouter from "@/routes/auth.route";
 
@@ -10,6 +16,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(getSessionMiddleware);
+app.use(cors(CORS_OPTIONS));
 
 const router = Router();
 

@@ -1,3 +1,5 @@
+import type { CorsOptions, CorsOptionsDelegate } from "cors";
+
 import dotenv from "dotenv";
 
 if (process.env.NODE_ENV !== "production") {
@@ -27,3 +29,14 @@ export const COOKIE_OPTIONS = {
   sameSite: PRODUCTION_ENV ? "strict" : "lax",
   secure: PRODUCTION_ENV ? true : false,
 } as const;
+
+export const CORS_OPTIONS: CorsOptions | CorsOptionsDelegate | undefined = {
+  allowedHeaders: ["Content-Type", "Cookie"],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  optionsSuccessStatus: 200,
+  origin:
+    NODE_ENV === "production"
+      ? "https://vods-to-cloud.strealr.live"
+      : "http://localhost:5173",
+};
