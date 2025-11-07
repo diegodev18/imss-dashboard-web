@@ -32,6 +32,7 @@ export default function NewUserForm({
   users: Array<User>;
   setUsers: React.Dispatch<React.SetStateAction<Array<User>>>;
 }) {
+  const [error, setError] = useState<string | null>(null);
   const [newUser, setNewUser] = useState<User>({
     id: Date.now(),
     name: "",
@@ -42,59 +43,77 @@ export default function NewUserForm({
     status: "active",
   });
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!Object.values(newUser).every((value) => value !== "")) {
+      setError("Por favor, completa todos los campos.");
+      return;
+    }
+    if (isNaN(Number(newUser.salary))) {
+      setError("El salario debe ser un número válido.");
+      return;
+    }
+    newUser.salary = Number(newUser.salary);
+
+    setError(null);
+    setUsers([...users, { ...newUser }]);
+    setNewUser({
+      id: Date.now(),
+      name: "",
+      curp: "",
+      rfc: "",
+      position: "",
+      salary: 0,
+      status: "active",
+    });
+  };
+
   return (
-    <form
-      className="grid grid-cols-3 gap-4 mt-5"
-      action=""
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (Object.values(newUser).every((value) => value !== "")) {
-          setUsers([...users, { ...newUser }]);
-          setNewUser({
-            id: Date.now(),
-            name: "",
-            curp: "",
-            rfc: "",
-            position: "",
-            salary: 0,
-            status: "active",
-          });
-        }
-      }}
-    >
-      <NewUserInput
-        newUserProperty="name"
-        newUser={newUser}
-        setNewUser={setNewUser}
-        placeholder="Nombre del usuario..."
-      />
-      <NewUserInput
-        newUserProperty="curp"
-        newUser={newUser}
-        setNewUser={setNewUser}
-        placeholder="CURP del usuario..."
-      />
-      <NewUserInput
-        newUserProperty="rfc"
-        newUser={newUser}
-        setNewUser={setNewUser}
-        placeholder="RFC del usuario..."
-      />
-      <NewUserInput
-        newUserProperty="salary"
-        newUser={newUser}
-        setNewUser={setNewUser}
-        placeholder="Salario del usuario..."
-      />
-      <NewUserInput
-        newUserProperty="position"
-        newUser={newUser}
-        setNewUser={setNewUser}
-        placeholder="Puesto del usuario..."
-      />
-      <button className="px-2.5 py-1 bg-neutral-800 rounded-md ring-1 ring-neutral-700 cursor-pointer">
-        Agregar Usuario
-      </button>
-    </form>
+    <>
+      <form className="mt-5" onSubmit={handleSubmit}>
+        <div className="grid grid-cols-3 gap-4">
+          <NewUserInput
+            newUserProperty="name"
+            newUser={newUser}
+            setNewUser={setNewUser}
+            placeholder="Nombre del usuario..."
+          />
+          <NewUserInput
+            newUserProperty="curp"
+            newUser={newUser}
+            setNewUser={setNewUser}
+            placeholder="CURP del usuario..."
+          />
+          <NewUserInput
+            newUserProperty="rfc"
+            newUser={newUser}
+            setNewUser={setNewUser}
+            placeholder="RFC del usuario..."
+          />
+          <NewUserInput
+            newUserProperty="salary"
+            newUser={newUser}
+            setNewUser={setNewUser}
+            placeholder="Salario del usuario..."
+          />
+          <NewUserInput
+            newUserProperty="position"
+            newUser={newUser}
+            setNewUser={setNewUser}
+            placeholder="Puesto del usuario..."
+          />
+        </div>
+        <button className="group px-2.5 py-1 w-full mt-4 bg-neutral-800 rounded-md ring-1 ring-neutral-700 cursor-pointer overflow-hidden">
+          <span className="group-hover:translate-x-1 transition-transform inline-block font-semibold">
+            Agregar Usuario
+          </span>
+        </button>
+      </form>
+      {error && (
+        <p className="text-red-500 mt-2 text-center">
+          <strong>Error:</strong> {error}
+        </p>
+      )}
+    </>
   );
 }

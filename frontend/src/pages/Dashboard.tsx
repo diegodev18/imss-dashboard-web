@@ -26,14 +26,34 @@ export default function Dashboard() {
                 key={user.id}
                 className="flex justify-between py-2 px-4 border-b border-neutral-700"
               >
-                {Object.entries(user).map(
-                  ([key, value]) =>
-                    key !== "id" && (
+                {Object.entries(user).map(([key, value]) => {
+                  if (key === "id") return null;
+
+                  if (key === "status") {
+                    return (
                       <span key={key}>
-                        <strong>{key}:</strong> {value.toString()}
+                        <strong>{key}:</strong>{" "}
+                        <select className="cursor-pointer">
+                          <option value="active" selected={value === "active"}>
+                            Active
+                          </option>
+                          <option
+                            value="inactive"
+                            selected={value === "inactive"}
+                          >
+                            Inactive
+                          </option>
+                        </select>
                       </span>
-                    )
-                )}
+                    );
+                  }
+
+                  return (
+                    <span key={key}>
+                      <strong>{key}:</strong> {value.toString()}
+                    </span>
+                  );
+                })}
               </li>
             ))}
         </ul>
