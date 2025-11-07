@@ -24,9 +24,16 @@ export default function Dashboard() {
             .map((user) => (
               <li
                 key={user.id}
-                className="py-2 px-4 border-b border-neutral-700"
+                className="flex justify-between py-2 px-4 border-b border-neutral-700"
               >
-                {user.name}
+                {Object.entries(user).map(
+                  ([key, value]) =>
+                    key !== "id" && (
+                      <span key={key}>
+                        <strong>{key}:</strong> {value.toString()}
+                      </span>
+                    )
+                )}
               </li>
             ))}
         </ul>
