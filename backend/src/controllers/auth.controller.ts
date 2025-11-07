@@ -44,7 +44,7 @@ export const login = async (req: Request<0, 0, LoginReq>, res: Response) => {
   }
 
   try {
-    const token = jwt.sign({ password, username }, JWT_SECRET, {
+    const token = jwt.sign({ username }, JWT_SECRET, {
       expiresIn: "7d",
     });
 
