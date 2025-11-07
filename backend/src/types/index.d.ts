@@ -1,6 +1,15 @@
 import { Request } from "express";
 
+export interface AddEmployeeReq {
+  curp?: string;
+  fullName?: string;
+  position?: string;
+  rfc?: string;
+  salary?: number;
+}
+
 export interface LoginReq {
+  id?: number;
   password?: string;
   username?: string;
 }
@@ -14,5 +23,5 @@ export interface RegisterReq {
 }
 
 export interface SessionRequest extends Request {
-  session?: { user: null | { name: string } };
+  session?: { user: null | { id: number; name: string } };
 }
