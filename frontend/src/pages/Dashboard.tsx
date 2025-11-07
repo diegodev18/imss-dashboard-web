@@ -1,30 +1,37 @@
+import NewUserForm from "../components/newUserForm";
 import { useState } from "react";
-import reactLogo from "../assets/react.svg";
-import viteLogo from "/vite.svg";
+import type { User } from "../types/users";
 
 export default function Dashboard() {
-  const [count, setCount] = useState(0);
+  const [searchValue, setSearchValue] = useState("");
+  const [users, setUsers] = useState<Array<User>>([]);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} alt="React logo" />
-        </a>
-      </div>
-      <h1>Dashboard</h1>
-      <div>
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p>Click on the Vite and React logos to learn more</p>
+      <main className="max-w-[800px] w-full mx-auto">
+        <input
+          className="block bg-neutral-800 focus:ring-1 ring-neutral-700 max-w-[400px] w-full mx-auto px-2.5 py-1 rounded-md focus:outline-0 mt-10 transition"
+          type="text"
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          placeholder="Buscar..."
+        />
+        <ul className="mt-4">
+          {users
+            .filter((user) =>
+              user.name.toLowerCase().includes(searchValue.toLowerCase())
+            )
+            .map((user) => (
+              <li
+                key={user.id}
+                className="py-2 px-4 border-b border-neutral-700"
+              >
+                {user.name}
+              </li>
+            ))}
+        </ul>
+        <NewUserForm users={users} setUsers={setUsers} />
+      </main>
     </>
   );
 }
