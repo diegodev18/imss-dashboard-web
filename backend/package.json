@@ -5,8 +5,9 @@
   "main": "src/app.ts",
   "scripts": {
     "dev": "nodemon",
-    "build": "rimraf ./dist && tsc --build && tsc-alias",
-    "start": "node ./dist/app.js"
+    "build": "rimraf ./dist && tsc --build && tsc-alias && prisma generate",
+    "start": "node ./dist/app.js",
+    "prisma:generate": "prisma generate"
   },
   "keywords": [],
   "author": "",
