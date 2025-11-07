@@ -1,10 +1,43 @@
 import { Request, Response } from "express";
 
-import type { SessionRequest } from "@/types";
+import type { AddEmployeeReq, SessionRequest } from "@/types";
 
 import { prisma } from "@/lib/prisma";
 
-export const addEmployee = (req: Request, res: Response) => {
+export const addEmployee = async (req: SessionRequest, res: Response) => {
+  if (!req.session?.user) {
+    return res.status(404).json({ message: "No session found" });
+  }
+
+  const body = req.body as Partial<AddEmployeeReq> | undefined;
+
+  if (!body) {
+    return res.status(400).json({ message: "Request body is required." });
+  } else if (
+    !body.full_name ||
+    !body.curp ||
+    !body.position ||
+    !body.rfc ||
+    !body.salary
+  ) {
+    return res.status(400).json({
+      message: "Full name, CURP, position, RFC, and salary are required.",
+    });
+  }
+
+  const { curp, full_name, position, rfc, salary } = body;
+
+  await prisma.employees.create({
+    data: {
+      created_by: req.session.user.id,
+      curp,
+      full_name,
+      position,
+      rfc,
+      salary,
+    },
+  });
+
   res.status(200).json({ message: "Employee added successfully." });
 };
 

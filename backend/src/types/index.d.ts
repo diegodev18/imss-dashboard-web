@@ -1,5 +1,13 @@
 import { Request } from "express";
 
+export interface AddEmployeeReq {
+  curp?: string;
+  full_name?: string;
+  position?: string;
+  rfc?: string;
+  salary?: number;
+}
+
 export interface LoginReq {
   id?: number;
   password?: string;
