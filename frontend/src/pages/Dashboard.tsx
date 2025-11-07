@@ -33,7 +33,12 @@ export default function Dashboard() {
                     return (
                       <span key={key}>
                         <strong>{key}:</strong>{" "}
-                        <select className="cursor-pointer">
+                        <select
+                          style={{
+                            color: value === "active" ? `#7bf1a8` : `#d1d5db  `,
+                          }}
+                          className="cursor-pointer focus:outline-0"
+                        >
                           <option value="active" selected={value === "active"}>
                             Active
                           </option>

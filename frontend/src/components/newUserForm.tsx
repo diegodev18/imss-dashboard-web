@@ -25,6 +25,30 @@ function NewUserInput({
   );
 }
 
+function NewUserSelect({
+  newUser,
+  setNewUser,
+}: {
+  newUser: User;
+  setNewUser: React.Dispatch<React.SetStateAction<User>>;
+}) {
+  return (
+    <select
+      className="block bg-neutral-800 ring-1 ring-neutral-700 max-w-[300px] w-full px-2.5 py-1 rounded-md focus:outline-0 cursor-pointer *:[option]:bg-neutral-800 *:[option]:text-white"
+      value={newUser.status}
+      onChange={(e) =>
+        setNewUser({
+          ...newUser,
+          status: e.target.value as "active" | "inactive",
+        })
+      }
+    >
+      <option value="active">Activo</option>
+      <option value="inactive">Inactivo</option>
+    </select>
+  );
+}
+
 export default function NewUserForm({
   users,
   setUsers,
@@ -102,6 +126,7 @@ export default function NewUserForm({
             setNewUser={setNewUser}
             placeholder="Puesto del usuario..."
           />
+          <NewUserSelect newUser={newUser} setNewUser={setNewUser} />
         </div>
         <button className="group px-2.5 py-1 w-full mt-4 bg-neutral-800 rounded-md ring-1 ring-neutral-700 cursor-pointer overflow-hidden">
           <span className="group-hover:translate-x-1 transition-transform inline-block font-semibold">
