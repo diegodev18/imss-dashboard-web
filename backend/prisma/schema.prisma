@@ -11,18 +11,18 @@ model companies {
   id         Int            @id @default(autoincrement())
   name       String
   legal_name String         @unique
-  rfc        String         @unique @db.VarChar(12)
+  rfc        String         @unique
   status     company_status @default(pending)
   created_at DateTime?      @default(now()) @db.Timestamp(6)
-  user_name  String         @unique @db.VarChar(14)
+  user_name  String         @unique
   password   String
 }
 
 model employees {
   id         Int              @id @default(autoincrement())
   full_name  String
-  curp       String           @db.VarChar(18)
-  rfc        String           @db.VarChar(12)
+  curp       String
+  rfc        String
   position   String
   salary     Decimal          @db.Decimal(10, 2)
   status     employees_status @default(active)
