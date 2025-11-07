@@ -11,6 +11,7 @@ export const {
   JWT_SECRET = "your_jwt_secret_must_be_at_least_32_characters_long_and_in_environment_variables",
   NODE_ENV = "development",
   ORIGIN_DOMAIN = "localhost",
+  SALT_ROUNDS = 10,
 } = process.env;
 
 if (!JWT_SECRET) {
@@ -29,6 +30,9 @@ export const COOKIE_OPTIONS = {
   sameSite: PRODUCTION_ENV ? "strict" : "lax",
   secure: PRODUCTION_ENV ? true : false,
 } as const;
+
+export const SALT_ROUNDS_NUM =
+  typeof SALT_ROUNDS === "number" ? SALT_ROUNDS : Number(SALT_ROUNDS);
 
 export const CORS_OPTIONS: CorsOptions | CorsOptionsDelegate | undefined = {
   allowedHeaders: ["Content-Type", "Cookie"],

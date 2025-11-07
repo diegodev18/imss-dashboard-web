@@ -1,12 +1,17 @@
 import type { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
+import { hash } from "bcrypt";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
-import { COOKIE_OPTIONS, JWT_SECRET } from "@/config";
+import { COOKIE_OPTIONS, JWT_SECRET, SALT_ROUNDS_NUM } from "@/config";
 import { prisma } from "@/lib/prisma";
 import { LoginReq, RegisterReq, SessionRequest } from "@/types";
-import { usernameValidator } from "@/utils/validator";
+import {
+  passwordValidator,
+  rfcValidator,
+  usernameValidator,
+} from "@/utils/validator";
 
 export const login = (req: Request<0, 0, LoginReq>, res: Response) => {
   if (req.cookies.access_token) {
@@ -24,9 +29,9 @@ export const login = (req: Request<0, 0, LoginReq>, res: Response) => {
   }
 
   try {
-    const { password, username } = req.body;
+    const { username } = req.body;
 
-    const token = jwt.sign({ password, username }, JWT_SECRET, {
+    const token = jwt.sign({ username }, JWT_SECRET, {
       expiresIn: "7d",
     });
 
@@ -53,28 +58,40 @@ export const register = async (
   } else if (
     !req.body.legalName ||
     !req.body.name ||
+    !req.body.password ||
     !req.body.rfc ||
     !req.body.username
   ) {
     return res.status(400).json({
-      message: "'legalName', 'name', 'rfc' and 'username' are required",
+      message:
+        "'legalName', 'name', 'password', 'rfc' and 'username' are required",
     });
   }
 
-  const { legalName, name, rfc, username } = req.body;
+  const { legalName, name, password, rfc, username } = req.body;
 
-  const validatedUsername = usernameValidator(username);
-  if (!validatedUsername.valid) {
+  if (!usernameValidator(username)) {
     return res.status(400).json({
-      message: validatedUsername.message,
+      message:
+        "Username must be between 7 and 14 characters and can only contain letters, numbers, and underscores",
     });
+  } else if (!passwordValidator(password)) {
+    return res.status(400).json({
+      message:
+        "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+    });
+  } else if (!rfcValidator(rfc)) {
+    return res.status(400).json({ message: "RFC format is invalid" });
   }
+
+  const passwordHashed = await hash(password, SALT_ROUNDS_NUM);
 
   try {
     const registered = await prisma.companies.create({
       data: {
         legal_name: legalName,
         name,
+        password: passwordHashed,
         rfc,
         user_name: username,
       },
@@ -90,9 +107,9 @@ export const register = async (
         message: "Company already registered with given RFC or username",
       });
     }
-    return res
-      .status(500)
-      .json({ code: prismaError.code, message: "Internal server error" });
+
+    console.error("Error during company registration:", err);
+    return res.status(500).json({ message: "Internal server error" });
   }
 
   try {
