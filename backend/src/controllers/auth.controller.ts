@@ -1,6 +1,6 @@
 import type { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
-import { hash } from "bcrypt";
+import { compare, hash } from "bcrypt";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
@@ -13,7 +13,7 @@ import {
   usernameValidator,
 } from "@/utils/validator";
 
-export const login = (req: Request<0, 0, LoginReq>, res: Response) => {
+export const login = async (req: Request<0, 0, LoginReq>, res: Response) => {
   if (req.cookies.access_token) {
     return res
       .status(400)
@@ -28,10 +28,23 @@ export const login = (req: Request<0, 0, LoginReq>, res: Response) => {
       .json({ message: "Username and password are required" });
   }
 
-  try {
-    const { username } = req.body;
+  const { password, username } = req.body;
+  const companyFound = await prisma.companies.findUnique({
+    where: { user_name: username },
+  });
 
-    const token = jwt.sign({ username }, JWT_SECRET, {
+  if (!companyFound) {
+    return res.status(404).json({ message: "Company not found" });
+  }
+
+  const passwordMatches = await compare(password, companyFound.password);
+
+  if (!passwordMatches) {
+    return res.status(401).json({ message: "Invalid credentials" });
+  }
+
+  try {
+    const token = jwt.sign({ password, username }, JWT_SECRET, {
       expiresIn: "7d",
     });
 
