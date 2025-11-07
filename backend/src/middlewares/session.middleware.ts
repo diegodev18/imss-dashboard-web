@@ -27,12 +27,12 @@ export const getSessionMiddleware = (
         ? (JSON.parse(verified) as LoginReq)
         : (verified as unknown as LoginReq);
 
-    if (!data.username) {
+    if (!data.username || !data.id) {
       next();
       return;
     }
 
-    req.session.user = { name: data.username };
+    req.session.user = { id: data.id, name: data.username };
   } catch (err) {
     console.error("Error validating session in middleware:", err);
 

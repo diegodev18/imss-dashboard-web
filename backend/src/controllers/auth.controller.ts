@@ -44,7 +44,7 @@ export const login = async (req: Request<0, 0, LoginReq>, res: Response) => {
   }
 
   try {
-    const token = jwt.sign({ username }, JWT_SECRET, {
+    const token = jwt.sign({ id: companyFound.id, username }, JWT_SECRET, {
       expiresIn: "7d",
     });
 
@@ -99,6 +99,7 @@ export const register = async (
 
   const passwordHashed = await hash(password, SALT_ROUNDS_NUM);
 
+  let registeredId: number;
   try {
     const registered = await prisma.companies.create({
       data: {
@@ -112,6 +113,7 @@ export const register = async (
     if (!registered.id) {
       return res.status(500).json({ message: "Failed to register company" });
     }
+    registeredId = registered.id;
   } catch (err) {
     const prismaError = err as PrismaClientKnownRequestError;
 
@@ -126,7 +128,7 @@ export const register = async (
   }
 
   try {
-    const token = jwt.sign({ username }, JWT_SECRET, {
+    const token = jwt.sign({ id: registeredId, username }, JWT_SECRET, {
       expiresIn: "7d",
     });
 
