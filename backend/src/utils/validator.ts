@@ -1,15 +1,16 @@
-export const usernameValidator = (
-  username: string
-): { message?: string; valid: boolean } => {
-  const usernameRegex = /^[a-zA-Z0-9_]{7,14}$/;
+export const usernameValidator = (username: string): boolean => {
+  const usernameRegex = /^[a-zA-Z0-9_]{14}$/;
+  return usernameRegex.test(username);
+};
 
-  if (!usernameRegex.test(username)) {
-    return {
-      message:
-        "Username must be between 7 and 14 characters and can only contain letters, numbers, and underscores",
-      valid: false,
-    };
+export const passwordValidator = (password: string): boolean => {
+  const passwordRegex = /^[a-zA-Z0-9!@#$%^&*()_+]{8,}$/;
+  return passwordRegex.test(password);
+};
+
+export const rfcValidator = (rfc: string): boolean => {
+  if (rfc.length === 13 || rfc.length === 12) {
+    return true;
   }
-
-  return { valid: true };
+  return false;
 };
