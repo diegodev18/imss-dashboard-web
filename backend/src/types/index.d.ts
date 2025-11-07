@@ -2,7 +2,7 @@ import { Request } from "express";
 
 export interface AddEmployeeReq {
   curp?: string;
-  full_name?: string;
+  fullName?: string;
   position?: string;
   rfc?: string;
   salary?: number;

@@ -14,7 +14,7 @@ export const addEmployee = async (req: SessionRequest, res: Response) => {
   if (!body) {
     return res.status(400).json({ message: "Request body is required." });
   } else if (
-    !body.full_name ||
+    !body.fullName ||
     !body.curp ||
     !body.position ||
     !body.rfc ||
@@ -25,13 +25,13 @@ export const addEmployee = async (req: SessionRequest, res: Response) => {
     });
   }
 
-  const { curp, full_name, position, rfc, salary } = body;
+  const { curp, fullName, position, rfc, salary } = body;
 
   await prisma.employees.create({
     data: {
       created_by: req.session.user.id,
       curp,
-      full_name,
+      full_name: fullName,
       position,
       rfc,
       salary,
