@@ -5,6 +5,13 @@ export interface LoginReq {
   username?: string;
 }
 
+export interface RegisterReq {
+  legalName?: string;
+  name?: string;
+  rfc?: string;
+  username?: string;
+}
+
 export interface SessionRequest extends Request {
   session?: { user: null | { name: string } };
 }
