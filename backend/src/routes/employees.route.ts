@@ -8,8 +8,8 @@ import {
 
 const router = Router();
 
-router.get("/employees/get", getEmployees);
-router.post("/employees/add", addEmployee);
-router.put("/employees/update/:id", updateEmployee);
+router.get("/get", getEmployees);
+router.post("/add", addEmployee);
+router.put("/update/:id", updateEmployee);
 
 export default router;
