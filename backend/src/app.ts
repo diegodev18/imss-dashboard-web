@@ -10,6 +10,7 @@ import {
 } from "@/config";
 import { getSessionMiddleware } from "@/middlewares";
 import authRouter from "@/routes/auth.route";
+import employeesRouter from "@/routes/employees.route";
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(cors(CORS_OPTIONS));
 const router = Router();
 
 router.use("/auth", authRouter);
+router.use("/employees", employeesRouter);
 
 router.get("/", (_, r) => r.status(200).json({ message: "API is running." }));
 
