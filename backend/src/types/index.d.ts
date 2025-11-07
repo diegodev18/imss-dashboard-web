@@ -1,6 +1,7 @@
 import { Request } from "express";
 
 export interface LoginReq {
+  id?: number;
   password?: string;
   username?: string;
 }
@@ -14,5 +15,5 @@ export interface RegisterReq {
 }
 
 export interface SessionRequest extends Request {
-  session?: { user: null | { name: string } };
+  session?: { user: null | { id: number; name: string } };
 }
