@@ -8,6 +8,7 @@ export interface LoginReq {
 export interface RegisterReq {
   legalName?: string;
   name?: string;
+  password?: string;
   rfc?: string;
   username?: string;
 }
