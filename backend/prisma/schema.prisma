@@ -19,15 +19,16 @@ model companies {
 }
 
 model employees {
-  id         Int              @id @default(autoincrement())
-  full_name  String
-  curp       String
-  rfc        String
-  position   String
-  salary     Decimal          @db.Decimal(10, 2)
-  status     employees_status @default(active)
-  created_by Int
-  created_at DateTime?        @default(now()) @db.Timestamp(6)
+  id                     Int              @id @default(autoincrement())
+  full_name              String
+  curp                   String           @unique
+  rfc                    String           @unique
+  position               String
+  salary                 Decimal          @db.Decimal(10, 2)
+  status                 employees_status @default(active)
+  created_by             Int
+  created_at             DateTime?        @default(now()) @db.Timestamp(6)
+  social_security_number String           @unique
 }
 
 enum company_status {

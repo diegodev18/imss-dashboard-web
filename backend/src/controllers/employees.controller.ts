@@ -21,14 +21,17 @@ export const addEmployee = async (req: SessionRequest, res: Response) => {
     !body.curp ||
     !body.position ||
     !body.rfc ||
-    !body.salary
+    !body.salary ||
+    !body.social_security_number
   ) {
     return res.status(400).json({
-      message: "Full name, CURP, position, RFC, and salary are required.",
+      message:
+        "Full name, CURP, position, RFC, salary, and social security number are required.",
     });
   }
 
-  const { curp, fullName, position, rfc, salary } = body;
+  const { curp, fullName, position, rfc, salary, social_security_number } =
+    body;
 
   if (!rfcValidator(rfc)) {
     return res.status(400).json({ message: "Invalid RFC format." });
@@ -43,6 +46,7 @@ export const addEmployee = async (req: SessionRequest, res: Response) => {
         position,
         rfc,
         salary,
+        social_security_number,
       },
     });
 

@@ -6,6 +6,7 @@ export interface AddEmployeeReq {
   position?: string;
   rfc?: string;
   salary?: number;
+  social_security_number?: string;
 }
 
 export interface LoginReq {

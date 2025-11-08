@@ -65,6 +65,7 @@ export default function NewUserForm({
     position: "",
     salary: 0,
     status: "active",
+    social_security_number: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -109,6 +110,7 @@ export default function NewUserForm({
       position: "",
       salary: 0,
       status: "active",
+      social_security_number: "",
     });
   };
 
@@ -145,6 +147,12 @@ export default function NewUserForm({
             newUser={newUser}
             setNewUser={setNewUser}
             placeholder="Puesto del usuario..."
+          />
+          <NewUserInput
+            newUserProperty="social_security_number"
+            newUser={newUser}
+            setNewUser={setNewUser}
+            placeholder="Número de seguridad social del usuario..."
           />
           <NewUserSelect newUser={newUser} setNewUser={setNewUser} />
         </div>
