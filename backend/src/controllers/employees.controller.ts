@@ -80,14 +80,31 @@ export const getEmployees = async (req: SessionRequest, res: Response) => {
     .json({ data: employees, message: "Employees retrieved successfully." });
 };
 
-export const updateEmployee = (req: Request, res: Response) => {
+export const updateEmployee = async (req: Request, res: Response) => {
   if (!req.params.id) {
     return res.status(400).json({ message: "Employee ID is required." });
   }
 
   const { id } = req.params;
+  const body = req.body as Partial<AddEmployeeReq> | undefined;
 
-  res
-    .status(200)
-    .json({ data: { id }, message: "Employee updated successfully." });
+  if (!body) {
+    return res.status(400).json({ message: "Request body is required." });
+  }
+
+  try {
+    const updatedEmployee = await prisma.employees.update({
+      data: { ...body },
+      where: { id: Number(id) },
+    });
+
+    return res.status(200).json({
+      data: updatedEmployee,
+      message: "Employee updated successfully.",
+    });
+  } catch (error) {
+    console.error("Error updating employee:", error);
+
+    return res.status(400).json({ message: "Error to update employee." });
+  }
 };

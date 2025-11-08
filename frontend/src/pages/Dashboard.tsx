@@ -61,6 +61,32 @@ export default function Dashboard() {
     window.location.href = "/auth";
   };
 
+  const changeUserData = async (userId: number, payload: Partial<User>) => {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/employees/update/${userId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+        credentials: "include",
+      }
+    );
+    if (!response.ok) {
+      console.error("Error updating user data");
+      return;
+    }
+
+    setUsers((prevUsers) =>
+      prevUsers.map((user) =>
+        user.id === userId ? { ...user, ...(payload as Partial<User>) } : user
+      )
+    );
+
+    console.log({ payload });
+  };
+
   return (
     <>
       <main className="max-w-[800px] w-full mx-auto">
@@ -92,8 +118,14 @@ export default function Dashboard() {
                   if (key === "status") {
                     return (
                       <span className="flex flex-nowrap gap-x-1" key={key}>
-                        <strong>{key}:</strong>{" "}
+                        <strong>Estatus:</strong>{" "}
                         <select
+                          onChange={() =>
+                            changeUserData(user.id, {
+                              status:
+                                value === "active" ? "inactive" : "active",
+                            })
+                          }
                           style={{
                             color: value === "active" ? `#7bf1a8` : `#d1d5db  `,
                           }}
@@ -128,6 +160,8 @@ export default function Dashboard() {
                           ? "Salario"
                           : key === "status"
                           ? "Estatus"
+                          : key === "social_security_number"
+                          ? "Seguro Social"
                           : key}
                         :
                       </strong>
