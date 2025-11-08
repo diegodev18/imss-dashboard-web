@@ -89,8 +89,6 @@ export default function Dashboard() {
         user.id === userId ? { ...user, ...(payload as Partial<User>) } : user
       )
     );
-
-    console.log({ payload });
   };
 
   return (
@@ -103,10 +101,10 @@ export default function Dashboard() {
           onChange={(e) => setSearchValue(e.target.value)}
           placeholder="Buscar..."
         />
-        <div className="relative">
+        <div className="relative mt-2">
           <button
             onClick={() => setShowStatusDropdown(!showStatusDropdown)}
-            className="bg-neutral-700 font-semibold px-1.5 rounded cursor-pointer"
+            className="bg-neutral-800 ring-1 ring-neutral-700 font-semibold px-1.5 rounded cursor-pointer"
           >
             Estatus ({statusFilter})
           </button>
@@ -118,7 +116,7 @@ export default function Dashboard() {
             {statuses.map((status) => (
               <button
                 key={status}
-                className="px-2 py-1 text-left hover:bg-neutral-700"
+                className="px-2 py-1 text-left hover:bg-neutral-700 cursor-pointer"
                 onClick={() => {
                   setStatusFilter(status as "all" | "active" | "inactive");
                   setShowStatusDropdown(false);
