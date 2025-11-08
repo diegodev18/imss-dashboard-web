@@ -5,6 +5,12 @@ import type { User } from "../types/users";
 export default function Dashboard() {
   const [searchValue, setSearchValue] = useState("");
   const [users, setUsers] = useState<Array<User>>([]);
+  const [statusFilter, setStatusFilter] = useState<
+    "all" | "active" | "inactive"
+  >("all");
+  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
+
+  const statuses = ["all", "active", "inactive"];
 
   useEffect(() => {
     (async () => {
@@ -97,10 +103,40 @@ export default function Dashboard() {
           onChange={(e) => setSearchValue(e.target.value)}
           placeholder="Buscar..."
         />
+        <div className="relative">
+          <button
+            onClick={() => setShowStatusDropdown(!showStatusDropdown)}
+            className="bg-neutral-700 font-semibold px-1.5 rounded cursor-pointer"
+          >
+            Estatus ({statusFilter})
+          </button>
+          <div
+            className={`absolute flex flex-col z-50 bg-neutral-800 rounded-lg overflow-hidden mt-0.5 ${
+              showStatusDropdown ? "block" : "hidden"
+            }`}
+          >
+            {statuses.map((status) => (
+              <button
+                key={status}
+                className="px-2 py-1 text-left hover:bg-neutral-700"
+                onClick={() => {
+                  setStatusFilter(status as "all" | "active" | "inactive");
+                  setShowStatusDropdown(false);
+                }}
+              >
+                {status.charAt(0).toUpperCase() + status.slice(1)}
+              </button>
+            ))}
+          </div>
+        </div>
         <ul className="gap-y-2 mt-2">
           {users
-            .filter((user) =>
-              user.full_name.toLowerCase().includes(searchValue.toLowerCase())
+            .filter(
+              (user) =>
+                user.full_name
+                  .toLowerCase()
+                  .includes(searchValue.toLowerCase()) &&
+                (statusFilter === "all" ? true : user.status === statusFilter)
             )
             .map((user) => (
               <li
