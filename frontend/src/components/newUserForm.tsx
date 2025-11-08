@@ -59,7 +59,7 @@ export default function NewUserForm({
   const [error, setError] = useState<string | null>(null);
   const [newUser, setNewUser] = useState<User>({
     id: Date.now(),
-    name: "",
+    full_name: "",
     curp: "",
     rfc: "",
     position: "",
@@ -83,7 +83,7 @@ export default function NewUserForm({
     setUsers([...users, { ...newUser }]);
     setNewUser({
       id: Date.now(),
-      name: "",
+      full_name: "",
       curp: "",
       rfc: "",
       position: "",
@@ -97,7 +97,7 @@ export default function NewUserForm({
       <form className="mt-5" onSubmit={handleSubmit}>
         <div className="grid grid-cols-3 gap-4">
           <NewUserInput
-            newUserProperty="name"
+            newUserProperty="full_name"
             newUser={newUser}
             setNewUser={setNewUser}
             placeholder="Nombre del usuario..."
