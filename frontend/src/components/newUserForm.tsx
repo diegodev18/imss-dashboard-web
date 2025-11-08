@@ -86,7 +86,11 @@ export default function NewUserForm({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newUser),
+        body: JSON.stringify({
+          ...newUser,
+          fullName: newUser.full_name,
+        }),
+        credentials: "include",
       }
     );
     if (!response.ok) {
