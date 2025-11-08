@@ -122,43 +122,43 @@ export default function NewUserForm({
             newUserProperty="full_name"
             newUser={newUser}
             setNewUser={setNewUser}
-            placeholder="Nombre del usuario..."
+            placeholder="Nombre del empleado..."
           />
           <NewUserInput
             newUserProperty="curp"
             newUser={newUser}
             setNewUser={setNewUser}
-            placeholder="CURP del usuario..."
+            placeholder="CURP del empleado..."
           />
           <NewUserInput
             newUserProperty="rfc"
             newUser={newUser}
             setNewUser={setNewUser}
-            placeholder="RFC del usuario..."
+            placeholder="RFC del empleado..."
           />
           <NewUserInput
             newUserProperty="salary"
             newUser={newUser}
             setNewUser={setNewUser}
-            placeholder="Salario del usuario..."
+            placeholder="Salario del empleado..."
           />
           <NewUserInput
             newUserProperty="position"
             newUser={newUser}
             setNewUser={setNewUser}
-            placeholder="Puesto del usuario..."
+            placeholder="Puesto del empleado..."
           />
           <NewUserInput
             newUserProperty="social_security_number"
             newUser={newUser}
             setNewUser={setNewUser}
-            placeholder="Número de seguridad social del usuario..."
+            placeholder="Número de seguridad social del empleado..."
           />
           <NewUserSelect newUser={newUser} setNewUser={setNewUser} />
         </div>
         <button className="group px-2.5 py-1 w-full mt-4 bg-neutral-800 rounded-md ring-1 ring-neutral-700 cursor-pointer overflow-hidden">
           <span className="group-hover:translate-x-1 transition-transform inline-block font-semibold">
-            Agregar Usuario
+            Agregar empleado
           </span>
         </button>
       </form>

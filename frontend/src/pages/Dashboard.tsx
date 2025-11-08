@@ -65,7 +65,7 @@ export default function Dashboard() {
     <>
       <main className="max-w-[800px] w-full mx-auto">
         <input
-          className="block bg-neutral-800 focus:ring-1 ring-neutral-700 max-w-[400px] w-full mx-auto px-2.5 py-1 rounded-md focus:outline-0 mt-10 transition"
+          className="block bg-neutral-800 focus:ring-1 ring-neutral-700 max-w-[400px] w-full mx-auto px-2.5 py-1.5 rounded-md focus:outline-0 mt-10 transition"
           type="text"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
