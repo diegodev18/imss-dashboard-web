@@ -48,6 +48,19 @@ export default function Dashboard() {
     })();
   }, []);
 
+  const logout = async () => {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/auth/logout`,
+      {
+        method: "POST",
+        credentials: "include",
+      }
+    );
+    if (!response.ok) return;
+
+    window.location.href = "/auth";
+  };
+
   return (
     <>
       <main className="max-w-[800px] w-full mx-auto">
@@ -127,6 +140,12 @@ export default function Dashboard() {
         </ul>
         <NewUserForm users={users} setUsers={setUsers} />
       </main>
+      <button
+        onClick={logout}
+        className="block mx-auto mt-3 cursor-pointer hover:underline text-neutral-300"
+      >
+        Cerrar sesión
+      </button>
     </>
   );
 }
