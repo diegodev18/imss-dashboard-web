@@ -1,6 +1,6 @@
 export interface User {
   id: number;
-  name: string;
+  full_name: string;
   curp: string;
   rfc: string;
   position: string;
