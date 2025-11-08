@@ -67,7 +67,7 @@ export default function NewUserForm({
     status: "active",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!Object.values(newUser).every((value) => value !== "")) {
       setError("Por favor, completa todos los campos.");
@@ -78,6 +78,22 @@ export default function NewUserForm({
       return;
     }
     newUser.salary = Number(newUser.salary);
+
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/employees/add`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newUser),
+      }
+    );
+    if (!response.ok) {
+      const data = await response.json();
+      setError(data.message || "Error al agregar el usuario.");
+      return;
+    }
 
     setError(null);
     setUsers([...users, { ...newUser }]);

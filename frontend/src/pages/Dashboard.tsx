@@ -42,7 +42,6 @@ export default function Dashboard() {
 
         const data = await response.json();
         setUsers(data.data);
-        console.log(data.data);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
