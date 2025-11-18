@@ -6,6 +6,7 @@
 
 - `frontend/`: Contains the React-based frontend application.
 - `backend/`: Contains the Node.js/Express backend server.
+By potenciANO lopez perez
 
 ## Getting Started
 
