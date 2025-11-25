@@ -37,6 +37,19 @@ export const login = async (req: Request<0, 0, LoginReq>, res: Response) => {
     return res.status(404).json({ message: "Company not found" });
   }
 
+  switch (companyFound.status) {
+    case "inactive":
+      return res
+        .status(403)
+        .json({ message: "Company is inactive. Contact support." });
+    case "pending":
+      return res
+        .status(403)
+        .json({ message: "Company registration is still pending." });
+    default:
+      break;
+  }
+
   const passwordMatches = await compare(password, companyFound.password);
 
   if (!passwordMatches) {
