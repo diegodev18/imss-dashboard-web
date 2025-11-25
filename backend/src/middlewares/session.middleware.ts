@@ -2,8 +2,8 @@ import { NextFunction, Response } from "express";
 import jwt from "jsonwebtoken";
 
 import { JWT_SECRET } from "@/config";
+import { SessionAuthTokenSchema } from "@/schemas/middlewares.schema";
 import { SessionRequest } from "@/types";
-import { LoginReq } from "@/types";
 
 export const getSessionMiddleware = (
   req: SessionRequest,
@@ -22,15 +22,17 @@ export const getSessionMiddleware = (
   try {
     const verified = jwt.verify(accessToken, JWT_SECRET);
 
-    const data: LoginReq =
-      typeof verified === "string"
-        ? (JSON.parse(verified) as LoginReq)
-        : (verified as unknown as LoginReq);
+    const tokenData = (
+      typeof verified === "string" ? JSON.parse(verified) : verified
+    ) as object;
 
-    if (!data.username || !data.id) {
+    const parseResult = SessionAuthTokenSchema.safeParse(tokenData);
+    if (!parseResult.success) {
       next();
       return;
     }
+
+    const { data } = parseResult;
 
     req.session.user = { id: data.id, name: data.username };
   } catch (err) {
