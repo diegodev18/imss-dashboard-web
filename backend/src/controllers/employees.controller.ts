@@ -5,7 +5,10 @@ import { Request, Response } from "express";
 import type { SessionRequest } from "@/types";
 
 import { prisma } from "@/lib/prisma";
-import { AddEmployeeBodySchema } from "@/schemas/employees.schema";
+import {
+  AddEmployeeBodySchema,
+  UpdateEmployeeBodySchema,
+} from "@/schemas/employees.schema";
 
 export const addEmployee = async (req: SessionRequest, res: Response) => {
   if (!req.session?.user) {
@@ -77,11 +80,20 @@ export const updateEmployee = async (req: Request, res: Response) => {
   }
 
   const { id } = req.params;
-  const body = req.body;
-
-  if (!body) {
-    return res.status(400).json({ message: "Request body is required." });
+  if (isNaN(Number(id))) {
+    return res.status(400).json({ message: "Employee ID must be a number." });
   }
+
+  const parseResult = UpdateEmployeeBodySchema.safeParse(req.body);
+  if (!parseResult.success) {
+    return res.status(400).json({
+      message: parseResult.error.issues
+        .map((issue) => issue.message)
+        .join(", "),
+    });
+  }
+
+  const body = parseResult.data;
 
   try {
     const updatedEmployee = await prisma.employees.update({
