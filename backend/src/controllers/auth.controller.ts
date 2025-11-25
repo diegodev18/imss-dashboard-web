@@ -174,6 +174,6 @@ export const logout = (req: Request, res: Response) => {
 
   return res
     .status(200)
-    .clearCookie("access_token")
+    .clearCookie("access_token", COOKIE_OPTIONS)
     .json({ message: "Logout successful" });
 };
