@@ -4,35 +4,38 @@ import { compare, hash } from "bcrypt";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
+import type { SessionRequest } from "@/types";
+
 import { COOKIE_OPTIONS, JWT_SECRET, SALT_ROUNDS_NUM } from "@/config";
 import { prisma } from "@/lib/prisma";
-import { LoginReq, RegisterReq, SessionRequest } from "@/types";
+import { LoginBodySchema, RegisterBodySchema } from "@/schemas/auth.schema";
 import {
   passwordValidator,
   rfcValidator,
   usernameValidator,
 } from "@/utils/validator";
 
-export const login = async (req: Request<0, 0, LoginReq>, res: Response) => {
-  if (req.cookies.access_token) {
+export const login = async (req: SessionRequest, res: Response) => {
+  if (req.session?.user) {
     return res
       .status(400)
       .json({ message: "User is already logged in. Please log out first." });
   }
 
-  if (!(req.body as unknown)) {
-    return res.status(400).json({ message: "Body is required" });
-  } else if (!req.body.username || !req.body.password) {
-    return res
-      .status(400)
-      .json({ message: "Username and password are required" });
+  const parseResult = LoginBodySchema.safeParse(req.body);
+  if (!parseResult.success) {
+    return res.status(400).json({
+      message: parseResult.error.issues
+        .map((issue) => issue.message)
+        .join(", "),
+    });
   }
 
-  const { password, username } = req.body;
-  const companyFound = await prisma.companies.findUnique({
-    where: { user_name: username },
-  });
+  const body = parseResult.data;
 
+  const companyFound = await prisma.companies.findUnique({
+    where: { user_name: body.user_name },
+  });
   if (!companyFound) {
     return res.status(404).json({ message: "Company not found" });
   }
@@ -50,18 +53,21 @@ export const login = async (req: Request<0, 0, LoginReq>, res: Response) => {
       break;
   }
 
-  const passwordMatches = await compare(password, companyFound.password);
-
+  const passwordMatches = await compare(body.password, companyFound.password);
   if (!passwordMatches) {
     return res.status(401).json({ message: "Invalid credentials" });
   }
 
   try {
-    const token = jwt.sign({ id: companyFound.id, username }, JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const token = jwt.sign(
+      { id: companyFound.id, user_name: body.user_name },
+      JWT_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
 
-    console.info(`User ${username} logged in.`);
+    console.info(`User ${body.user_name} logged in.`);
 
     return res
       .status(200)
@@ -73,54 +79,48 @@ export const login = async (req: Request<0, 0, LoginReq>, res: Response) => {
   }
 };
 
-export const register = async (
-  req: Request<0, 0, RegisterReq>,
-  res: Response
-) => {
-  if (req.cookies.access_token) {
+export const register = async (req: SessionRequest, res: Response) => {
+  if (req.session?.user) {
     return res
       .status(400)
       .json({ message: "User is already logged in. Please log out first." });
-  } else if (
-    !req.body.legalName ||
-    !req.body.name ||
-    !req.body.password ||
-    !req.body.rfc ||
-    !req.body.username
-  ) {
+  }
+
+  const parseResult = RegisterBodySchema.safeParse(req.body);
+  if (!parseResult.success) {
     return res.status(400).json({
-      message:
-        "'legalName', 'name', 'password', 'rfc' and 'username' are required",
+      message: parseResult.error.issues
+        .map((issue) => issue.message)
+        .join(", "),
     });
   }
 
-  const { legalName, name, password, rfc, username } = req.body;
+  const body = parseResult.data;
 
-  if (!usernameValidator(username)) {
+  if (!usernameValidator(body.user_name)) {
     return res.status(400).json({
       message:
         "Username must be between 7 and 14 characters and can only contain letters, numbers, and underscores",
     });
-  } else if (!passwordValidator(password)) {
+  } else if (!passwordValidator(body.password)) {
     return res.status(400).json({
       message:
         "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character",
     });
-  } else if (!rfcValidator(rfc)) {
+  } else if (!rfcValidator(body.rfc)) {
     return res.status(400).json({ message: "RFC format is invalid" });
   }
 
-  const passwordHashed = await hash(password, SALT_ROUNDS_NUM);
-
+  const passwordHashed = await hash(body.password, SALT_ROUNDS_NUM);
   let registeredId: number;
   try {
     const registered = await prisma.companies.create({
       data: {
-        legal_name: legalName,
-        name,
+        legal_name: body.legal_name,
+        name: body.name,
         password: passwordHashed,
-        rfc,
-        user_name: username,
+        rfc: body.rfc,
+        user_name: body.user_name,
       },
     });
     if (!registered.id) {
@@ -141,11 +141,15 @@ export const register = async (
   }
 
   try {
-    const token = jwt.sign({ id: registeredId, username }, JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const token = jwt.sign(
+      { id: registeredId, user_name: body.user_name },
+      JWT_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
 
-    console.info(`Company ${name} registered.`);
+    console.info(`Company ${body.name} registered.`);
 
     return res.status(201).cookie("access_token", token, COOKIE_OPTIONS).json({
       message: "Company registered successfully. Wait for verification.",

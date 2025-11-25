@@ -2,51 +2,40 @@ import type { PrismaClientKnownRequestError } from "@prisma/client/runtime/libra
 
 import { Request, Response } from "express";
 
-import type { AddEmployeeReq, SessionRequest } from "@/types";
+import type { SessionRequest } from "@/types";
 
 import { prisma } from "@/lib/prisma";
-import { rfcValidator } from "@/utils/validator";
+import {
+  AddEmployeeBodySchema,
+  UpdateEmployeeBodySchema,
+} from "@/schemas/employees.schema";
 
 export const addEmployee = async (req: SessionRequest, res: Response) => {
   if (!req.session?.user) {
     return res.status(404).json({ message: "No session found" });
   }
 
-  const body = req.body as Partial<AddEmployeeReq> | undefined;
-
-  if (!body) {
-    return res.status(400).json({ message: "Request body is required." });
-  } else if (
-    !body.fullName ||
-    !body.curp ||
-    !body.position ||
-    !body.rfc ||
-    !body.salary ||
-    !body.social_security_number
-  ) {
+  const parseResult = AddEmployeeBodySchema.safeParse(req.body);
+  if (!parseResult.success) {
     return res.status(400).json({
-      message:
-        "Full name, CURP, position, RFC, salary, and social security number are required.",
+      message: parseResult.error.issues
+        .map((issue) => issue.message)
+        .join(", "),
     });
   }
 
-  const { curp, fullName, position, rfc, salary, social_security_number } =
-    body;
-
-  if (!rfcValidator(rfc)) {
-    return res.status(400).json({ message: "Invalid RFC format." });
-  }
+  const body = parseResult.data;
 
   try {
     await prisma.employees.create({
       data: {
         created_by: req.session.user.id,
-        curp,
-        full_name: fullName,
-        position,
-        rfc,
-        salary,
-        social_security_number,
+        curp: body.curp,
+        full_name: body.full_name,
+        position: body.position,
+        rfc: body.rfc,
+        salary: body.salary,
+        social_security_number: body.social_security_number,
       },
     });
 
@@ -54,10 +43,15 @@ export const addEmployee = async (req: SessionRequest, res: Response) => {
   } catch (error) {
     const prismaError = error as PrismaClientKnownRequestError;
 
-    if (prismaError.code === "P2002") {
-      return res
-        .status(400)
-        .json({ message: "Employee with this CURP or RFC already exists." });
+    switch (prismaError.code) {
+      case "P2002":
+        return res
+          .status(400)
+          .json({ message: "Employee with this CURP or RFC already exists." });
+      case "P2025":
+        return res.status(404).json({ message: "Related record not found." });
+      default:
+        break;
     }
 
     console.error("Error adding employee:", error);
@@ -86,11 +80,20 @@ export const updateEmployee = async (req: Request, res: Response) => {
   }
 
   const { id } = req.params;
-  const body = req.body as Partial<AddEmployeeReq> | undefined;
-
-  if (!body) {
-    return res.status(400).json({ message: "Request body is required." });
+  if (isNaN(Number(id))) {
+    return res.status(400).json({ message: "Employee ID must be a number." });
   }
+
+  const parseResult = UpdateEmployeeBodySchema.safeParse(req.body);
+  if (!parseResult.success) {
+    return res.status(400).json({
+      message: parseResult.error.issues
+        .map((issue) => issue.message)
+        .join(", "),
+    });
+  }
+
+  const body = parseResult.data;
 
   try {
     const updatedEmployee = await prisma.employees.update({
