@@ -34,7 +34,12 @@ export const getSessionMiddleware = (
 
     const { data } = parseResult;
 
-    req.session.user = { id: data.id, name: data.username };
+    req.session.user = {
+      id: data.id,
+      legal_name: data.legal_name,
+      name: data.name,
+      user_name: data.user_name,
+    };
   } catch (err) {
     console.error("Error validating session in middleware:", err);
 
