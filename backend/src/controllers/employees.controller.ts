@@ -2,7 +2,7 @@ import type { PrismaClientKnownRequestError } from "@prisma/client/runtime/libra
 
 import { Request, Response } from "express";
 
-import type { AddEmployeeReq, SessionRequest } from "@/types";
+import type { SessionRequest } from "@/types";
 
 import { prisma } from "@/lib/prisma";
 import { rfcValidator } from "@/utils/validator";
@@ -12,7 +12,7 @@ export const addEmployee = async (req: SessionRequest, res: Response) => {
     return res.status(404).json({ message: "No session found" });
   }
 
-  const body = req.body as Partial<AddEmployeeReq> | undefined;
+  const body = req.body;
 
   if (!body) {
     return res.status(400).json({ message: "Request body is required." });
@@ -86,7 +86,7 @@ export const updateEmployee = async (req: Request, res: Response) => {
   }
 
   const { id } = req.params;
-  const body = req.body as Partial<AddEmployeeReq> | undefined;
+  const body = req.body;
 
   if (!body) {
     return res.status(400).json({ message: "Request body is required." });

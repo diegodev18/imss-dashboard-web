@@ -4,16 +4,17 @@ import { compare, hash } from "bcrypt";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
+import type { SessionRequest } from "@/types";
+
 import { COOKIE_OPTIONS, JWT_SECRET, SALT_ROUNDS_NUM } from "@/config";
 import { prisma } from "@/lib/prisma";
-import { LoginReq, RegisterReq, SessionRequest } from "@/types";
 import {
   passwordValidator,
   rfcValidator,
   usernameValidator,
 } from "@/utils/validator";
 
-export const login = async (req: Request<0, 0, LoginReq>, res: Response) => {
+export const login = async (req: SessionRequest, res: Response) => {
   if (req.cookies.access_token) {
     return res
       .status(400)
@@ -73,10 +74,7 @@ export const login = async (req: Request<0, 0, LoginReq>, res: Response) => {
   }
 };
 
-export const register = async (
-  req: Request<0, 0, RegisterReq>,
-  res: Response
-) => {
+export const register = async (req: SessionRequest, res: Response) => {
   if (req.cookies.access_token) {
     return res
       .status(400)
