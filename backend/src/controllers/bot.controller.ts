@@ -15,6 +15,16 @@ export const createAuthToken = async (req: SessionRequest, res: Response) => {
     },
   });
 
+  if (!sessionCreated.auth_token) {
+    await prisma.bot_sessions.delete({
+      where: {
+        id: sessionCreated.id,
+      },
+    });
+
+    return res.status(500).json({ message: "Failed to create auth token" });
+  }
+
   return res.status(201).json({ authToken: sessionCreated.auth_token });
 };
 
