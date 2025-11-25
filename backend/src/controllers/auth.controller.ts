@@ -8,7 +8,7 @@ import type { SessionRequest } from "@/types";
 
 import { COOKIE_OPTIONS, JWT_SECRET, SALT_ROUNDS_NUM } from "@/config";
 import { prisma } from "@/lib/prisma";
-import { LoginBodySchema } from "@/schemas/auth.schema";
+import { LoginBodySchema, RegisterBodySchema } from "@/schemas/auth.schema";
 import {
   passwordValidator,
   rfcValidator,
@@ -80,50 +80,47 @@ export const login = async (req: SessionRequest, res: Response) => {
 };
 
 export const register = async (req: SessionRequest, res: Response) => {
-  if (req.cookies.access_token) {
+  if (req.session?.user) {
     return res
       .status(400)
       .json({ message: "User is already logged in. Please log out first." });
-  } else if (
-    !req.body.legalName ||
-    !req.body.name ||
-    !req.body.password ||
-    !req.body.rfc ||
-    !req.body.username
-  ) {
+  }
+
+  const parseResult = RegisterBodySchema.safeParse(req.body);
+  if (!parseResult.success) {
     return res.status(400).json({
-      message:
-        "'legalName', 'name', 'password', 'rfc' and 'username' are required",
+      message: parseResult.error.issues
+        .map((issue) => issue.message)
+        .join(", "),
     });
   }
 
-  const { legalName, name, password, rfc, username } = req.body;
+  const body = parseResult.data;
 
-  if (!usernameValidator(username)) {
+  if (!usernameValidator(body.username)) {
     return res.status(400).json({
       message:
         "Username must be between 7 and 14 characters and can only contain letters, numbers, and underscores",
     });
-  } else if (!passwordValidator(password)) {
+  } else if (!passwordValidator(body.password)) {
     return res.status(400).json({
       message:
         "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character",
     });
-  } else if (!rfcValidator(rfc)) {
+  } else if (!rfcValidator(body.rfc)) {
     return res.status(400).json({ message: "RFC format is invalid" });
   }
 
-  const passwordHashed = await hash(password, SALT_ROUNDS_NUM);
-
+  const passwordHashed = await hash(body.password, SALT_ROUNDS_NUM);
   let registeredId: number;
   try {
     const registered = await prisma.companies.create({
       data: {
-        legal_name: legalName,
-        name,
+        legal_name: body.legalName,
+        name: body.name,
         password: passwordHashed,
-        rfc,
-        user_name: username,
+        rfc: body.rfc,
+        user_name: body.username,
       },
     });
     if (!registered.id) {
@@ -144,11 +141,15 @@ export const register = async (req: SessionRequest, res: Response) => {
   }
 
   try {
-    const token = jwt.sign({ id: registeredId, username }, JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const token = jwt.sign(
+      { id: registeredId, username: body.username },
+      JWT_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
 
-    console.info(`Company ${name} registered.`);
+    console.info(`Company ${body.name} registered.`);
 
     return res.status(201).cookie("access_token", token, COOKIE_OPTIONS).json({
       message: "Company registered successfully. Wait for verification.",
