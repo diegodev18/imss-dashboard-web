@@ -10,6 +10,7 @@ import {
 } from "@/config";
 import { getSessionMiddleware } from "@/middlewares";
 import authRouter from "@/routes/auth.route";
+import botRouter from "@/routes/bot.route";
 import employeesRouter from "@/routes/employees.route";
 
 const app = express();
@@ -23,6 +24,7 @@ const router = Router();
 
 router.use("/auth", authRouter);
 router.use("/employees", employeesRouter);
+router.use("/bot", botRouter);
 
 router.get("/", (_, r) => r.status(200).json({ message: "API is running." }));
 
