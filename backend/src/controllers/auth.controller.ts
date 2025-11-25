@@ -34,7 +34,7 @@ export const login = async (req: SessionRequest, res: Response) => {
   const body = parseResult.data;
 
   const companyFound = await prisma.companies.findUnique({
-    where: { user_name: body.username },
+    where: { user_name: body.user_name },
   });
   if (!companyFound) {
     return res.status(404).json({ message: "Company not found" });
@@ -60,14 +60,14 @@ export const login = async (req: SessionRequest, res: Response) => {
 
   try {
     const token = jwt.sign(
-      { id: companyFound.id, username: body.username },
+      { id: companyFound.id, user_name: body.user_name },
       JWT_SECRET,
       {
         expiresIn: "7d",
       }
     );
 
-    console.info(`User ${body.username} logged in.`);
+    console.info(`User ${body.user_name} logged in.`);
 
     return res
       .status(200)
@@ -97,7 +97,7 @@ export const register = async (req: SessionRequest, res: Response) => {
 
   const body = parseResult.data;
 
-  if (!usernameValidator(body.username)) {
+  if (!usernameValidator(body.user_name)) {
     return res.status(400).json({
       message:
         "Username must be between 7 and 14 characters and can only contain letters, numbers, and underscores",
@@ -116,11 +116,11 @@ export const register = async (req: SessionRequest, res: Response) => {
   try {
     const registered = await prisma.companies.create({
       data: {
-        legal_name: body.legalName,
+        legal_name: body.legal_name,
         name: body.name,
         password: passwordHashed,
         rfc: body.rfc,
-        user_name: body.username,
+        user_name: body.user_name,
       },
     });
     if (!registered.id) {
@@ -142,7 +142,7 @@ export const register = async (req: SessionRequest, res: Response) => {
 
   try {
     const token = jwt.sign(
-      { id: registeredId, username: body.username },
+      { id: registeredId, user_name: body.user_name },
       JWT_SECRET,
       {
         expiresIn: "7d",
