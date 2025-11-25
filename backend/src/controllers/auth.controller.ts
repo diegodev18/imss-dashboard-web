@@ -8,6 +8,7 @@ import type { SessionRequest } from "@/types";
 
 import { COOKIE_OPTIONS, JWT_SECRET, SALT_ROUNDS_NUM } from "@/config";
 import { prisma } from "@/lib/prisma";
+import { LoginBodySchema } from "@/schemas/auth.schema";
 import {
   passwordValidator,
   rfcValidator,
@@ -15,25 +16,26 @@ import {
 } from "@/utils/validator";
 
 export const login = async (req: SessionRequest, res: Response) => {
-  if (req.cookies.access_token) {
+  if (req.session?.user) {
     return res
       .status(400)
       .json({ message: "User is already logged in. Please log out first." });
   }
 
-  if (!(req.body as unknown)) {
-    return res.status(400).json({ message: "Body is required" });
-  } else if (!req.body.username || !req.body.password) {
-    return res
-      .status(400)
-      .json({ message: "Username and password are required" });
+  const parseResult = LoginBodySchema.safeParse(req.body);
+  if (!parseResult.success) {
+    return res.status(400).json({
+      message: parseResult.error.issues
+        .map((issue) => issue.message)
+        .join(", "),
+    });
   }
 
-  const { password, username } = req.body;
-  const companyFound = await prisma.companies.findUnique({
-    where: { user_name: username },
-  });
+  const body = parseResult.data;
 
+  const companyFound = await prisma.companies.findUnique({
+    where: { user_name: body.username },
+  });
   if (!companyFound) {
     return res.status(404).json({ message: "Company not found" });
   }
@@ -51,18 +53,21 @@ export const login = async (req: SessionRequest, res: Response) => {
       break;
   }
 
-  const passwordMatches = await compare(password, companyFound.password);
-
+  const passwordMatches = await compare(body.password, companyFound.password);
   if (!passwordMatches) {
     return res.status(401).json({ message: "Invalid credentials" });
   }
 
   try {
-    const token = jwt.sign({ id: companyFound.id, username }, JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const token = jwt.sign(
+      { id: companyFound.id, username: body.username },
+      JWT_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
 
-    console.info(`User ${username} logged in.`);
+    console.info(`User ${body.username} logged in.`);
 
     return res
       .status(200)
