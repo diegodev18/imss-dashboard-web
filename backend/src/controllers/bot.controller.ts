@@ -28,6 +28,36 @@ export const createAuthToken = async (req: SessionRequest, res: Response) => {
   return res.status(201).json({ authToken: sessionCreated.auth_token });
 };
 
+export const deleteSession = async (req: SessionRequest, res: Response) => {
+  if (!req.session?.user) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  const { authToken } = req.params;
+
+  const session = await prisma.bot_sessions.findUnique({
+    where: {
+      auth_token: authToken,
+    },
+  });
+
+  if (!session) {
+    return res.status(404).json({ message: "Session not found" });
+  }
+
+  if (session.created_by !== req.session.user.id) {
+    return res.status(403).json({ message: "Forbidden" });
+  }
+
+  await prisma.bot_sessions.delete({
+    where: {
+      auth_token: authToken,
+    },
+  });
+
+  return res.status(200).json({ message: "Session deleted successfully" });
+};
+
 export const getSessions = async (req: SessionRequest, res: Response) => {
   if (!req.session?.user) {
     return res.status(401).json({ message: "Unauthorized" });
