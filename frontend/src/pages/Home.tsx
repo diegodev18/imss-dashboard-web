@@ -150,6 +150,163 @@ export default function Home() {
             </ul>
           </SectionContainer>
         </div>
+        <div className="bg-white py-16">
+          <SectionContainer>
+            <div className="max-w-2xl mx-auto">
+              <div className="text-center mb-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-3">
+                  Registra tu Empresa
+                </h2>
+                <p className="text-base text-gray-600">
+                  Completa el formulario y comienza a gestionar a tus empleados
+                  con IMSS Dashboard
+                </p>
+              </div>
+
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  // TODO: Implementar lógica de registro
+                  console.log("Formulario enviado");
+                }}
+                className="bg-linear-to-br from-blue-50 to-indigo-50 p-6 rounded-lg shadow-md"
+              >
+                <div className="space-y-4">
+                  <div>
+                    <label
+                      htmlFor="companyName"
+                      className="block text-sm font-semibold text-gray-700 mb-1"
+                    >
+                      Nombre de la Empresa *
+                    </label>
+                    <input
+                      type="text"
+                      id="companyName"
+                      name="companyName"
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                      placeholder="Ingresa el nombre de tu empresa"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label
+                        htmlFor="contactName"
+                        className="block text-sm font-semibold text-gray-700 mb-1"
+                      >
+                        Nombre del Contacto *
+                      </label>
+                      <input
+                        type="text"
+                        id="contactName"
+                        name="contactName"
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                        placeholder="Tu nombre completo"
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="phone"
+                        className="block text-sm font-semibold text-gray-700 mb-1"
+                      >
+                        Teléfono *
+                      </label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                        placeholder="(55) 1234-5678"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-semibold text-gray-700 mb-1"
+                    >
+                      Correo Electrónico *
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                      placeholder="contacto@empresa.com"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="rfc"
+                      className="block text-sm font-semibold text-gray-700 mb-1"
+                    >
+                      RFC de la Empresa *
+                    </label>
+                    <input
+                      type="text"
+                      id="rfc"
+                      name="rfc"
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                      placeholder="ABC123456XYZ"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="employeeCount"
+                      className="block text-sm font-semibold text-gray-700 mb-1"
+                    >
+                      Número de Empleados
+                    </label>
+                    <select
+                      id="employeeCount"
+                      name="employeeCount"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    >
+                      <option value="">Selecciona una opción</option>
+                      <option value="1-10">1-10 empleados</option>
+                      <option value="11-50">11-50 empleados</option>
+                      <option value="51-200">51-200 empleados</option>
+                      <option value="201-500">201-500 empleados</option>
+                      <option value="500+">Más de 500 empleados</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="message"
+                      className="block text-sm font-semibold text-gray-700 mb-1"
+                    >
+                      Mensaje Adicional
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      rows={4}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all resize-none"
+                      placeholder="¿Algo que quieras comentarnos?"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold text-base transition-all duration-200 shadow-lg hover:shadow-xl"
+                  >
+                    Enviar Solicitud de Registro
+                  </button>
+                </div>
+              </form>
+            </div>
+          </SectionContainer>
+        </div>
       </main>
       <footer className="bg-gray-900 text-gray-300 py-12">
         <SectionContainer>
