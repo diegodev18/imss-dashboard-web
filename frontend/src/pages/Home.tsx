@@ -46,7 +46,13 @@ export default function Home() {
               </a>
               <a
                 href="#telegram"
-                className="bg-white hover:bg-gray-50 text-blue-600 px-6 py-2.5 rounded-lg font-semibold text-base transition-all duration-200 shadow-lg hover:shadow-xl border-2 border-blue-600"
+                className="bg-white hover:bg-gray-50 text-blue-600 px-6 py-2.5 rounded-lg font-semibold text-base transition-all duration-200 shadow-lg hover:shadow-xl border-2 border-blue-600 scroll-smooth"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document
+                    .getElementById("telegram")
+                    ?.scrollIntoView({ behavior: "smooth" });
+                }}
               >
                 ¡Prueba nuestro Asistente de Telegram!
               </a>
