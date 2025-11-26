@@ -122,7 +122,10 @@ export default function Home() {
               </p>
               <a
                 className="inline-flex items-center gap-x-2 bg-white text-blue-600 px-6 py-1.5 rounded-lg font-semibold text-base hover:bg-blue-50 transition-colors duration-200 shadow-lg"
-                href="https://t.me/IeuImsBot"
+                href={
+                  pages.find((p) => p.name === "Telegram Bot")?.url ||
+                  "https://t.me/IeuImsBot"
+                }
                 target="_blank"
                 rel="noopener noreferrer"
               >
