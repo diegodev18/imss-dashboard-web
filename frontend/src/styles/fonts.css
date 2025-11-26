@@ -1,0 +1,27 @@
+@font-face {
+    font-family: "Onest";
+    src: url("/fonts/Onest-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Onest";
+    src: url("/fonts/Onest-Bold.ttf") format("truetype");
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Onest";
+    src: url("/fonts/Onest-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Onest";
+    src: url("/fonts/Onest-SemiBold.ttf") format("truetype");
+    font-weight: 600;
+    font-style: normal;
+}
