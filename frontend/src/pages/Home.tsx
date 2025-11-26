@@ -9,19 +9,7 @@ import { contacts } from "../consts/contacts";
 import { pages } from "../consts/urls";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-
-const RegisterBodySchema = z.object({
-  legal_name: z.string().min(1, "El nombre legal es requerido"),
-  name: z.string().min(1, "El nombre es requerido"),
-  password: z.string().min(1, "La contraseña es requerida"),
-  rfc: z
-    .string()
-    .regex(/^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$/, "El formato del RFC es inválido"),
-  user_name: z.string().min(1, "El nombre de usuario es requerido"),
-});
-
-type RegisterFormData = z.infer<typeof RegisterBodySchema>;
+import { RegisterBodySchema, type RegisterFormData } from "../schemas/register";
 
 export default function Home() {
   const {
