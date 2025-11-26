@@ -5,6 +5,7 @@ import {
   secondary as secondaryFeatures,
   telegram as telegramFeatures,
 } from "../consts/features";
+import { contacts } from "../consts/contacts";
 
 export default function Home() {
   return (
@@ -189,9 +190,12 @@ export default function Home() {
             <div>
               <h4 className="text-base font-bold text-white mb-2">Contacto</h4>
               <ul className="space-y-1 text-sm">
-                <li>Email: soporte@imssdashboard.com</li>
-                <li>Tel: +52 (55) 1234-5678</li>
-                <li>Horario: Lun - Vie, 9:00 - 18:00</li>
+                {contacts.map((contact, idx) => (
+                  <li key={idx}>
+                    <span className="font-semibold">{contact.name}:</span>{" "}
+                    <span>{contact.value}</span>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
