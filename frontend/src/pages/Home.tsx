@@ -1,63 +1,12 @@
 import TelegramIcon from "../components/icons/telegram";
 import SectionContainer from "../components/sectionContainer";
+import {
+  main as features,
+  secondary as secondaryFeatures,
+  telegram as telegramFeatures,
+} from "../consts/features";
 
 export default function Home() {
-  const features = [
-    {
-      title: "Gestión Simplificada",
-      description: "Administra todos tus empleados de forma eficiente y segura",
-    },
-    {
-      title: "Gestión Simplificada",
-      description: "Administra todos tus empleados de forma eficiente y segura",
-    },
-    {
-      title: "Gestión Simplificada",
-      description: "Administra todos tus empleados de forma eficiente y segura",
-    },
-  ];
-
-  const features2 = [
-    {
-      title: "Gestión de Empleados",
-      description:
-        "Administra toda la información de tus empleados en un solo lugar. Alta, baja y modificaciones en tiempo real",
-    },
-    {
-      title: "Gestión de Empleados",
-      description:
-        "Administra toda la información de tus empleados en un solo lugar. Alta, baja y modificaciones en tiempo real",
-    },
-    {
-      title: "Gestión de Empleados",
-      description:
-        "Administra toda la información de tus empleados en un solo lugar. Alta, baja y modificaciones en tiempo real",
-    },
-    {
-      title: "Gestión de Empleados",
-      description:
-        "Administra toda la información de tus empleados en un solo lugar. Alta, baja y modificaciones en tiempo real",
-    },
-  ];
-
-  const telegramFeatures = [
-    {
-      title: "Consultas Rápidas",
-      description:
-        "Obtén información instantánea sobre el estado de tus empleados y trámites",
-    },
-    {
-      title: "Notificaciones Automáticas",
-      description:
-        "Recibe alertas sobre fechas importantes y actualizaciones del IMSS",
-    },
-    {
-      title: "Asistencia Personalizada",
-      description:
-        "Resuelve tus dudas con respuestas rápidas y precisas a través del asistente virtual",
-    },
-  ];
-
   return (
     <>
       <header>
@@ -80,8 +29,8 @@ export default function Home() {
             <a>¡Prueba nuestro Asistente de Telegram!</a>
           </div>
           <ul>
-            {features.map((feature, index) => (
-              <li key={index}>
+            {features.map((feature, idx) => (
+              <li key={idx}>
                 <h2>{feature.title}</h2>
                 <p>{feature.description}</p>
               </li>
@@ -98,8 +47,8 @@ export default function Home() {
           </p>
         </div>
         <ul>
-          {features2.map((feature, index) => (
-            <li key={index}>
+          {secondaryFeatures.map((feature, idx) => (
+            <li key={idx}>
               <h2>{feature.title}</h2>
               <p>{feature.description}</p>
             </li>
@@ -118,8 +67,8 @@ export default function Home() {
             Conectar con Telegram <TelegramIcon className="h-8" />
           </a>
           <ul>
-            {telegramFeatures.map((feature, index) => (
-              <li key={index}>
+            {telegramFeatures.map((feature, idx) => (
+              <li key={idx}>
                 <h2>{feature.title}</h2>
                 <p>{feature.description}</p>
               </li>
