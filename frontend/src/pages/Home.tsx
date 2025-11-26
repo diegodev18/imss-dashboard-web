@@ -119,11 +119,13 @@ export default function Home() {
                 directamente en Telegram.
               </p>
               <a
-                className="inline-flex items-center gap-x-2 bg-white text-blue-600 px-6 py-2.5 rounded-lg font-semibold text-base hover:bg-blue-50 transition-colors duration-200 shadow-lg"
-                href="#"
+                className="inline-flex items-center gap-x-2 bg-white text-blue-600 px-6 py-1.5 rounded-lg font-semibold text-base hover:bg-blue-50 transition-colors duration-200 shadow-lg"
+                href="https://t.me/IeuImsBot"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 Conectar con Telegram
-                <TelegramIcon className="h-6" />
+                <TelegramIcon className="h-8 w-8" />
               </a>
             </div>
             <ul className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
