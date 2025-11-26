@@ -6,6 +6,7 @@ import {
   telegram as telegramFeatures,
 } from "../consts/features";
 import { contacts } from "../consts/contacts";
+import { pages } from "../consts/urls";
 
 export default function Home() {
   return (
@@ -164,27 +165,20 @@ export default function Home() {
                 Enlaces Rápidos
               </h4>
               <ul className="space-y-1 text-sm">
-                <li>
-                  <a
-                    href="/dashboard"
-                    className="hover:text-white transition-colors"
-                  >
-                    Dashboard
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#telegram"
-                    className="hover:text-white transition-colors"
-                  >
-                    Telegram Bot
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Documentación
-                  </a>
-                </li>
+                {pages.map((page, idx) => (
+                  <li key={idx}>
+                    <a
+                      href={page.url}
+                      className="hover:underline hover:text-white transition-colors duration-300"
+                      target={page.url.startsWith("http") ? "_blank" : "_self"}
+                      rel={
+                        page.url.startsWith("http") ? "noopener noreferrer" : ""
+                      }
+                    >
+                      {page.name}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </div>
             <div>
