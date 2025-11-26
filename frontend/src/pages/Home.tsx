@@ -7,8 +7,36 @@ import {
 } from "../consts/features";
 import { contacts } from "../consts/contacts";
 import { pages } from "../consts/urls";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const RegisterBodySchema = z.object({
+  legal_name: z.string().min(1, "El nombre legal es requerido"),
+  name: z.string().min(1, "El nombre es requerido"),
+  password: z.string().min(1, "La contraseña es requerida"),
+  rfc: z
+    .string()
+    .regex(/^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$/, "El formato del RFC es inválido"),
+  user_name: z.string().min(1, "El nombre de usuario es requerido"),
+});
+
+type RegisterFormData = z.infer<typeof RegisterBodySchema>;
 
 export default function Home() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(RegisterBodySchema),
+  });
+
+  const onSubmit = (data: RegisterFormData) => {
+    // TODO: Implementar lógica de registro
+    console.log("Formulario enviado:", data);
+  };
+
   return (
     <div className="min-h-screen">
       <header className="py-2 bg-white shadow-sm border-b border-zinc-200">
@@ -164,82 +192,54 @@ export default function Home() {
               </div>
 
               <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  // TODO: Implementar lógica de registro
-                  console.log("Formulario enviado");
-                }}
+                onSubmit={handleSubmit(onSubmit)}
                 className="bg-linear-to-br from-blue-50 to-indigo-50 p-6 rounded-lg shadow-md"
               >
                 <div className="space-y-4">
                   <div>
                     <label
-                      htmlFor="companyName"
+                      htmlFor="legal_name"
                       className="block text-sm font-semibold text-gray-700 mb-1"
                     >
-                      Nombre de la Empresa *
+                      Nombre Legal de la Empresa *
                     </label>
                     <input
                       type="text"
-                      id="companyName"
-                      name="companyName"
-                      required
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-                      placeholder="Ingresa el nombre de tu empresa"
+                      id="legal_name"
+                      {...register("legal_name")}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all ${
+                        errors.legal_name ? "border-red-500" : "border-gray-300"
+                      }`}
+                      placeholder="Nombre legal registrado"
                     />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label
-                        htmlFor="contactName"
-                        className="block text-sm font-semibold text-gray-700 mb-1"
-                      >
-                        Nombre del Contacto *
-                      </label>
-                      <input
-                        type="text"
-                        id="contactName"
-                        name="contactName"
-                        required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-                        placeholder="Tu nombre completo"
-                      />
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="phone"
-                        className="block text-sm font-semibold text-gray-700 mb-1"
-                      >
-                        Teléfono *
-                      </label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-                        placeholder="(55) 1234-5678"
-                      />
-                    </div>
+                    {errors.legal_name && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.legal_name.message}
+                      </p>
+                    )}
                   </div>
 
                   <div>
                     <label
-                      htmlFor="email"
+                      htmlFor="name"
                       className="block text-sm font-semibold text-gray-700 mb-1"
                     >
-                      Correo Electrónico *
+                      Nombre Comercial *
                     </label>
                     <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      required
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-                      placeholder="contacto@empresa.com"
+                      type="text"
+                      id="name"
+                      {...register("name")}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all ${
+                        errors.name ? "border-red-500" : "border-gray-300"
+                      }`}
+                      placeholder="Nombre comercial de la empresa"
                     />
+                    {errors.name && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.name.message}
+                      </p>
+                    )}
                   </div>
 
                   <div>
@@ -252,55 +252,71 @@ export default function Home() {
                     <input
                       type="text"
                       id="rfc"
-                      name="rfc"
-                      required
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                      {...register("rfc")}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all uppercase ${
+                        errors.rfc ? "border-red-500" : "border-gray-300"
+                      }`}
                       placeholder="ABC123456XYZ"
+                      maxLength={13}
                     />
+                    {errors.rfc && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.rfc.message}
+                      </p>
+                    )}
                   </div>
 
                   <div>
                     <label
-                      htmlFor="employeeCount"
+                      htmlFor="user_name"
                       className="block text-sm font-semibold text-gray-700 mb-1"
                     >
-                      Número de Empleados
+                      Nombre de Usuario *
                     </label>
-                    <select
-                      id="employeeCount"
-                      name="employeeCount"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-                    >
-                      <option value="">Selecciona una opción</option>
-                      <option value="1-10">1-10 empleados</option>
-                      <option value="11-50">11-50 empleados</option>
-                      <option value="51-200">51-200 empleados</option>
-                      <option value="201-500">201-500 empleados</option>
-                      <option value="500+">Más de 500 empleados</option>
-                    </select>
+                    <input
+                      type="text"
+                      id="user_name"
+                      {...register("user_name")}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all ${
+                        errors.user_name ? "border-red-500" : "border-gray-300"
+                      }`}
+                      placeholder="Usuario para acceder al sistema"
+                    />
+                    {errors.user_name && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.user_name.message}
+                      </p>
+                    )}
                   </div>
 
                   <div>
                     <label
-                      htmlFor="message"
+                      htmlFor="password"
                       className="block text-sm font-semibold text-gray-700 mb-1"
                     >
-                      Mensaje Adicional
+                      Contraseña *
                     </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      rows={4}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all resize-none"
-                      placeholder="¿Algo que quieras comentarnos?"
+                    <input
+                      type="password"
+                      id="password"
+                      {...register("password")}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all ${
+                        errors.password ? "border-red-500" : "border-gray-300"
+                      }`}
+                      placeholder="Contraseña segura"
                     />
+                    {errors.password && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.password.message}
+                      </p>
+                    )}
                   </div>
 
                   <button
                     type="submit"
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold text-base transition-all duration-200 shadow-lg hover:shadow-xl"
                   >
-                    Enviar Solicitud de Registro
+                    Registrar Empresa
                   </button>
                 </div>
               </form>
