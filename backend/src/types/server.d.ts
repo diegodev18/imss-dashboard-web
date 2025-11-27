@@ -1,7 +1,6 @@
-import { Request } from "express";
-
-import type { SessionAuthToken } from "@/schemas/middlewares.schema";
+import type { companies } from "@prisma/client";
+import type { Request } from "express";
 
 export interface SessionRequest extends Request {
-  session?: { user: null | SessionAuthToken };
+  session?: { user: companies | null };
 }

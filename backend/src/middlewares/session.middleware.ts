@@ -1,11 +1,13 @@
-import { NextFunction, Response } from "express";
+import type { NextFunction, Response } from "express";
+
 import jwt from "jsonwebtoken";
 
 import { JWT_SECRET } from "@/config";
+import { prisma } from "@/lib/prisma";
 import { SessionAuthTokenSchema } from "@/schemas/middlewares.schema";
 import { SessionRequest } from "@/types";
 
-export const getSessionMiddleware = (
+export const getSessionMiddleware = async (
   req: SessionRequest,
   res: Response,
   next: NextFunction
@@ -32,14 +34,9 @@ export const getSessionMiddleware = (
       return;
     }
 
-    const { data } = parseResult;
-
-    req.session.user = {
-      id: data.id,
-      legal_name: data.legal_name,
-      name: data.name,
-      user_name: data.user_name,
-    };
+    req.session.user = await prisma.companies.findUnique({
+      where: { id: parseResult.data.id },
+    });
   } catch (err) {
     console.error("Error validating session in middleware:", err);
 
