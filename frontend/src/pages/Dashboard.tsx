@@ -1,5 +1,6 @@
 import NewUserForm from "../components/newUserForm";
 import { useState, useEffect } from "react";
+import type { Company } from "../types";
 import type { User } from "../types/users";
 
 export default function Dashboard() {
@@ -9,6 +10,7 @@ export default function Dashboard() {
     "all" | "active" | "inactive"
   >("all");
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
+  const [company, setCompany] = useState<null | Company>(null);
 
   const statuses = ["all", "active", "inactive"];
 
@@ -24,9 +26,9 @@ export default function Dashboard() {
           credentials: "include",
         }
       );
-      if (!response.ok) {
-        window.location.href = "/auth";
-      }
+      if (!response.ok) return;
+      const data = (await response.json()) as { user: Company };
+      setCompany(data.user);
     })();
   }, []);
 
@@ -53,6 +55,11 @@ export default function Dashboard() {
       }
     })();
   }, []);
+
+  if (company?.status !== "active") {
+    window.location.href = "/auth";
+    return null;
+  }
 
   const logout = async () => {
     const response = await fetch(
