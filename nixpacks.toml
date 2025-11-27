@@ -6,7 +6,7 @@ env = { NODE_ENV = "production" }
 cmds = ["pnpm install --frozen-lockfile"]
 
 [phases.build]
-cmds = ["pnpm run build"]
+cmds = ["pnpm --filter backend run prisma:generate", "pnpm run build"]
 
 [start]
 cmd = "pnpm run start"
