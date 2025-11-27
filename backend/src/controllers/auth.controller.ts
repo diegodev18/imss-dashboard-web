@@ -35,19 +35,6 @@ export const login = async (req: SessionRequest, res: Response) => {
     return res.status(404).json({ message: "Company not found" });
   }
 
-  switch (companyFound.status) {
-    case "inactive":
-      return res
-        .status(403)
-        .json({ message: "Company is inactive. Contact support." });
-    case "pending":
-      return res
-        .status(403)
-        .json({ message: "Company registration is still pending." });
-    default:
-      break;
-  }
-
   const passwordMatches = await compare(body.password, companyFound.password);
   if (!passwordMatches) {
     return res.status(401).json({ message: "Invalid credentials" });
@@ -148,11 +135,8 @@ export const getSession = (req: SessionRequest, res: Response) => {
     return res.status(404).json({ message: "No access_token found at cookie" });
   } else if (!req.session) {
     return res.status(404).json({ message: "No session found" });
-  } else if (req.session.user?.status !== "active") {
-    return res.status(403).json({
-      message:
-        "Company is not active. Wait for verification or contact support.",
-    });
+  } else if (!req.session.user) {
+    return res.status(404).json({ message: "No user found in session" });
   }
 
   const user = req.session.user;
