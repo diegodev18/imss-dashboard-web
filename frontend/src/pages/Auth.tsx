@@ -40,12 +40,31 @@ export default function Auth() {
             <br />
             Espera la aprobación o contacta al soporte.
           </p>
-          <a
-            href="/"
-            className="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 active:scale-[0.98]"
-          >
-            Ir a la página principal
-          </a>
+          <div className="flex flex-col mx-auto gap-2 max-w-[250px]">
+            <a
+              href="/"
+              className="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 active:scale-[0.98]"
+            >
+              Ir a la página principal
+            </a>
+            <button
+              onClick={async () => {
+                const response = await fetch(
+                  `${import.meta.env.VITE_API_URL}/auth/logout`,
+                  {
+                    method: "POST",
+                    credentials: "include",
+                  }
+                );
+                if (!response.ok) return;
+
+                window.location.href = "/auth";
+              }}
+              className="text-sm cursor-pointer hover:underline transition"
+            >
+              Cerrar sesión
+            </button>
+          </div>
         </div>
       </main>
     );
