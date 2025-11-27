@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 export default function Auth() {
-  const [username, setUsername] = useState("");
+  const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -25,7 +25,7 @@ export default function Auth() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!username || !password) {
+    if (!userName || !password) {
       return setError("Por favor, completa todos los campos.");
     }
     setError("");
@@ -35,10 +35,14 @@ export default function Auth() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ user_name: userName, password }),
       credentials: "include",
     });
-    if (!response.ok) {
+    if (response.status === 403) {
+      return setError(
+        "Empresa inactiva o en espera. Espera la aprobación o contacta al soporte."
+      );
+    } else if (!response.ok) {
       return setError("Error al iniciar sesión. Verifica tus credenciales.");
     }
     window.location.href = "/dashboard";
@@ -71,8 +75,8 @@ export default function Auth() {
               id="username"
               type="text"
               name="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
               placeholder="Ingresa tu usuario"
               className="w-full px-3 py-2 text-sm bg-white border border-gray-300 rounded-md 
                        placeholder:text-gray-400 text-gray-900
