@@ -1,9 +1,12 @@
+import type { Company } from "../types";
+
 import { useState, useEffect } from "react";
 
 export default function Auth() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [user, setUser] = useState<null | Company>(null);
 
   useEffect(() => {
     (async () => {
@@ -18,9 +21,38 @@ export default function Auth() {
         }
       );
       if (!response.ok) return;
-      window.location.href = "/dashboard";
+      const data = (await response.json()) as { user: Company };
+      setUser(data.user);
     })();
   }, []);
+
+  if (user && user.status !== "active") {
+    return (
+      <main className="min-h-screen bg-white flex items-center justify-center px-4">
+        <div className="w-full max-w-sm text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            Ya has iniciado sesión
+          </h1>
+          <p className="text-sm text-gray-500 mb-6">
+            Ya has iniciado sesión como{" "}
+            <strong>{user.name.toUpperCase()}</strong>. Pero tu status es{" "}
+            <strong>{user.status.toUpperCase()}</strong>.
+            <br />
+            Espera la aprobación o contacta al soporte.
+          </p>
+          <a
+            href="/"
+            className="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 active:scale-[0.98]"
+          >
+            Ir a la página principal
+          </a>
+        </div>
+      </main>
+    );
+  } else if (user?.status === "active") {
+    window.location.href = "/dashboard";
+    return null;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
