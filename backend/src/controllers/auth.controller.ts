@@ -9,11 +9,6 @@ import type { SessionRequest } from "@/types";
 import { COOKIE_OPTIONS, JWT_SECRET, SALT_ROUNDS_NUM } from "@/config";
 import { prisma } from "@/lib/prisma";
 import { LoginBodySchema, RegisterBodySchema } from "@/schemas/auth.schema";
-import {
-  passwordValidator,
-  rfcValidator,
-  usernameValidator,
-} from "@/utils/validator";
 
 export const login = async (req: SessionRequest, res: Response) => {
   if (req.session?.user) {
@@ -97,20 +92,6 @@ export const register = async (req: SessionRequest, res: Response) => {
 
   const body = parseResult.data;
 
-  if (!usernameValidator(body.user_name)) {
-    return res.status(400).json({
-      message:
-        "Username must be between 7 and 14 characters and can only contain letters, numbers, and underscores",
-    });
-  } else if (!passwordValidator(body.password)) {
-    return res.status(400).json({
-      message:
-        "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character",
-    });
-  } else if (!rfcValidator(body.rfc)) {
-    return res.status(400).json({ message: "RFC format is invalid" });
-  }
-
   const passwordHashed = await hash(body.password, SALT_ROUNDS_NUM);
   let registeredId: number;
   try {
@@ -167,16 +148,18 @@ export const getSession = (req: SessionRequest, res: Response) => {
     return res.status(404).json({ message: "No access_token found at cookie" });
   } else if (!req.session) {
     return res.status(404).json({ message: "No session found" });
+  } else if (req.session.user?.status !== "active") {
+    return res.status(403).json({
+      message:
+        "Company is not active. Wait for verification or contact support.",
+    });
   }
 
   const user = req.session.user;
 
-  if (!user) {
-    return res.status(404).json({ message: "No active session found" });
-  }
-
   const sanitized = {
     name: user.name,
+    status: user.status,
   };
 
   return res.status(200).json({ user: sanitized });

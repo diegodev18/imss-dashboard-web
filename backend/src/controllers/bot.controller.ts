@@ -7,6 +7,11 @@ import { prisma } from "@/lib/prisma";
 export const createAuthToken = async (req: SessionRequest, res: Response) => {
   if (!req.session?.user) {
     return res.status(401).json({ message: "Unauthorized" });
+  } else if (req.session.user.status !== "active") {
+    return res.status(403).json({
+      message:
+        "Company is not active. Wait for verification or contact support.",
+    });
   }
 
   const sessionCreated = await prisma.bot_sessions.create({
@@ -31,6 +36,11 @@ export const createAuthToken = async (req: SessionRequest, res: Response) => {
 export const deleteSession = async (req: SessionRequest, res: Response) => {
   if (!req.session?.user) {
     return res.status(401).json({ message: "Unauthorized" });
+  } else if (req.session.user.status !== "active") {
+    return res.status(403).json({
+      message:
+        "Company is not active. Wait for verification or contact support.",
+    });
   }
 
   const { authToken } = req.params;

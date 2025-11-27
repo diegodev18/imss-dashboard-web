@@ -1,6 +1,6 @@
 import type { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
-import { Request, Response } from "express";
+import { Response } from "express";
 
 import type { SessionRequest } from "@/types";
 
@@ -13,6 +13,11 @@ import {
 export const addEmployee = async (req: SessionRequest, res: Response) => {
   if (!req.session?.user) {
     return res.status(404).json({ message: "No session found" });
+  } else if (req.session.user.status !== "active") {
+    return res.status(403).json({
+      message:
+        "Company is not active. Wait for verification or contact support.",
+    });
   }
 
   const parseResult = AddEmployeeBodySchema.safeParse(req.body);
@@ -74,9 +79,16 @@ export const getEmployees = async (req: SessionRequest, res: Response) => {
     .json({ data: employees, message: "Employees retrieved successfully." });
 };
 
-export const updateEmployee = async (req: Request, res: Response) => {
+export const updateEmployee = async (req: SessionRequest, res: Response) => {
   if (!req.params.id) {
     return res.status(400).json({ message: "Employee ID is required." });
+  } else if (!req.session?.user) {
+    return res.status(404).json({ message: "No session found" });
+  } else if (req.session.user.status !== "active") {
+    return res.status(403).json({
+      message:
+        "Company is not active. Wait for verification or contact support.",
+    });
   }
 
   const { id } = req.params;
@@ -94,6 +106,16 @@ export const updateEmployee = async (req: Request, res: Response) => {
   }
 
   const body = parseResult.data;
+
+  const employeeFound = await prisma.employees.findUnique({
+    where: { id: Number(id) },
+  });
+
+  if (!employeeFound) {
+    return res.status(404).json({ message: "Employee not found." });
+  } else if (employeeFound.created_by !== req.session.user.id) {
+    return res.status(403).json({ message: "Forbidden" });
+  }
 
   try {
     const updatedEmployee = await prisma.employees.update({
