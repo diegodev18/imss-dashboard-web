@@ -56,7 +56,7 @@ export default function Dashboard() {
     })();
   }, []);
 
-  if (company?.status !== "active") {
+  if (company && company.status !== "active") {
     window.location.href = "/auth";
     return null;
   }
