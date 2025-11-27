@@ -19,10 +19,20 @@ export const RegisterBodySchema = z.object({
     .transform((val) => val.trim().toLowerCase()),
   password: z
     .string()
-    .regex(
-      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-      "Password must contain at least one letter and one number"
-    ),
+    .min(8, { message: "Password must be at least 8 characters long." })
+    .max(64, { message: "Password cannot exceed 64 characters." })
+    .refine((val) => /[a-z]/.test(val), {
+      message: "Must contain at least one lowercase letter.",
+    })
+    .refine((val) => /[A-Z]/.test(val), {
+      message: "Must contain at least one uppercase letter.",
+    })
+    .refine((val) => /\d/.test(val), {
+      message: "Must contain at least one number.",
+    })
+    .refine((val) => /[!@#$%^&*()\-_=+[\]{};:'",.<>/?\\|`~]/.test(val), {
+      message: "Must contain at least one special character.",
+    }),
   rfc: z
     .string()
     .regex(/^[a-zñA-ZÑ&]{3,4}\d{6}[a-zA-Z0-9]{3}$/i, "RFC format is invalid")

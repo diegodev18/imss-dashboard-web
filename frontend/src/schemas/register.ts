@@ -1,17 +1,38 @@
 import { z } from "zod";
 
 export const RegisterBodySchema = z.object({
-  legal_name: z.string().min(1, "El nombre legal es obligatorio"),
-  name: z.string().min(1, "El nombre es obligatorio"),
-  password: z.string().min(1, "La contraseña es obligatoria"),
+  legal_name: z
+    .string()
+    .min(1, "Legal name is required")
+    .transform((val) => val.trim().toLowerCase()),
+  name: z
+    .string()
+    .min(1, "Name is required")
+    .transform((val) => val.trim().toLowerCase()),
+  password: z
+    .string()
+    .min(8, { message: "La contraseña debe tener al menos 8 caracteres." })
+    .max(64, { message: "La contraseña no puede exceder 64 caracteres." })
+    .refine((val) => /[a-z]/.test(val), {
+      message: "Debe contener al menos una letra minúscula.",
+    })
+    .refine((val) => /[A-Z]/.test(val), {
+      message: "Debe contener al menos una letra mayúscula.",
+    })
+    .refine((val) => /\d/.test(val), {
+      message: "Debe contener al menos un número.",
+    })
+    .refine((val) => /[!@#$%^&*()\-_=+[\]{};:'",.<>/?\\|`~]/.test(val), {
+      message: "Debe contener al menos un carácter especial.",
+    }),
   rfc: z
     .string()
-    .regex(
-      /^[a-zñA-ZÑ&]{3,4}\d{6}[a-zA-Z0-9]{3}$/i,
-      "El formato del RFC es inválido"
-    )
-    .transform((val) => val.toUpperCase()),
-  user_name: z.string().min(1, "El nombre de usuario es obligatorio"),
+    .regex(/^[a-zñA-ZÑ&]{3,4}\d{6}[a-zA-Z0-9]{3}$/i, "RFC format is invalid")
+    .transform((val) => val.toLowerCase()),
+  user_name: z
+    .string()
+    .min(1, "Username is required")
+    .transform((val) => val.trim().toLowerCase()),
 });
 
 export type RegisterFormData = z.infer<typeof RegisterBodySchema>;

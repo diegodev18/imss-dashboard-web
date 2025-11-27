@@ -22,14 +22,8 @@ export default function Home() {
   });
 
   const onSubmit = (data: RegisterFormData) => {
-    const dataToSend = Object.fromEntries(
-      Object.entries(data).map(([key, value]) => [
-        key,
-        value.trim().toLowerCase(),
-      ])
-    );
     axios
-      .post(`${import.meta.env.VITE_API_URL}/auth/register`, dataToSend, {
+      .post(`${import.meta.env.VITE_API_URL}/auth/register`, data, {
         headers: {
           "Content-Type": "application/json",
         },
