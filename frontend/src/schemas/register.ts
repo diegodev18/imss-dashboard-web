@@ -1,13 +1,17 @@
 import { z } from "zod";
 
 export const RegisterBodySchema = z.object({
-  legal_name: z.string().min(1, "El nombre legal es requerido"),
-  name: z.string().min(1, "El nombre es requerido"),
-  password: z.string().min(1, "La contraseña es requerida"),
+  legal_name: z.string().min(1, "El nombre legal es obligatorio"),
+  name: z.string().min(1, "El nombre es obligatorio"),
+  password: z.string().min(1, "La contraseña es obligatoria"),
   rfc: z
     .string()
-    .regex(/^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$/, "El formato del RFC es inválido"),
-  user_name: z.string().min(1, "El nombre de usuario es requerido"),
+    .regex(
+      /^[a-zñA-ZÑ&]{3,4}\d{6}[a-zA-Z0-9]{3}$/i,
+      "El formato del RFC es inválido"
+    )
+    .transform((val) => val.toUpperCase()),
+  user_name: z.string().min(1, "El nombre de usuario es obligatorio"),
 });
 
 export type RegisterFormData = z.infer<typeof RegisterBodySchema>;

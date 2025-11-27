@@ -10,6 +10,7 @@ import { pages } from "../consts/urls";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterBodySchema, type RegisterFormData } from "../schemas/register";
+import axios from "axios";
 
 export default function Home() {
   const {
@@ -21,16 +22,24 @@ export default function Home() {
   });
 
   const onSubmit = (data: RegisterFormData) => {
-    fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-      credentials: "include",
-    })
+    const dataToSend = Object.fromEntries(
+      Object.entries(data).map(([key, value]) => [
+        key,
+        value.trim().toLowerCase(),
+      ])
+    );
+    axios
+      .post(`${import.meta.env.VITE_API_URL}/auth/register`, dataToSend, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      })
       .then(() => (window.location.href = "/dashboard"))
-      .catch((err) => alert("Error al registrar la empresa: " + err.message));
+      .catch((err) => {
+        console.error(err.response.data);
+        alert("Error al registrar la empresa: " + err.message);
+      });
   };
 
   return (
