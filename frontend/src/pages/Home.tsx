@@ -43,7 +43,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
-      <header className="py-2 bg-white shadow-sm border-b border-zinc-200">
+      <header className="fixed left-0 top-0 w-full py-3.5 bg-white/65 backdrop-blur-xs shadow-sm border-b border-zinc-200">
         <SectionContainer className="flex justify-between items-center">
           <div className="flex items-center gap-x-2">
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
@@ -62,7 +62,7 @@ export default function Home() {
         </SectionContainer>
       </header>
       <main className="bg-linear-to-br from-blue-50 to-indigo-50">
-        <SectionContainer>
+        <SectionContainer className="pb-1 pt-14">
           <div className="py-12 text-center">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">
               Bienvenido a IMSS Dashboard
@@ -182,7 +182,7 @@ export default function Home() {
             </ul>
           </SectionContainer>
         </div>
-        <div className="bg-white py-16">
+        <div id="register-form" className="bg-white py-16">
           <SectionContainer>
             <div className="max-w-2xl mx-auto">
               <div className="text-center mb-8">
