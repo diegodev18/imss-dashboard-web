@@ -3,11 +3,11 @@ import { z } from "zod";
 export const RegisterBodySchema = z.object({
   legal_name: z
     .string()
-    .min(1, "Legal name is required")
+    .min(1, "Nombre legal es obligatorio")
     .transform((val) => val.trim().toLowerCase()),
   name: z
     .string()
-    .min(1, "Name is required")
+    .min(1, "Nombre es obligatorio")
     .transform((val) => val.trim().toLowerCase()),
   password: z
     .string()
@@ -27,11 +27,14 @@ export const RegisterBodySchema = z.object({
     }),
   rfc: z
     .string()
-    .regex(/^[a-zñA-ZÑ&]{3,4}\d{6}[a-zA-Z0-9]{3}$/i, "RFC format is invalid")
+    .regex(
+      /^[a-zñA-ZÑ&]{3,4}\d{6}[a-zA-Z0-9]{3}$/i,
+      "El formato del RFC es inválido"
+    )
     .transform((val) => val.toLowerCase()),
   user_name: z
     .string()
-    .min(1, "Username is required")
+    .min(1, "Nombre de usuario es obligatorio")
     .transform((val) => val.trim().toLowerCase()),
 });
 
