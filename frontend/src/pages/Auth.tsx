@@ -132,7 +132,7 @@ export default function Auth() {
         <div className="mt-5 text-center">
           <p className="text-sm text-gray-500">
             ¿Aun no tienes cuenta?{" "}
-            <a href="#register-form" className="hover:underline">
+            <a href="/#register-form" className="hover:underline">
               Registrate aquí
             </a>
           </p>
