@@ -78,11 +78,7 @@ export default function Auth() {
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
               placeholder="Ingresa tu usuario"
-              className="w-full px-3 py-2 text-sm bg-white border border-gray-300 rounded-md 
-                       placeholder:text-gray-400 text-gray-900
-                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                       transition-all duration-200
-                       hover:border-gray-400"
+              className="w-full px-3 py-2 text-sm bg-white border border-gray-300 rounded-md placeholder:text-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-400"
               autoComplete="username"
             />
           </div>
@@ -101,11 +97,7 @@ export default function Auth() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Ingresa tu contraseña"
-              className="w-full px-3 py-2 text-sm bg-white border border-gray-300 rounded-md 
-                       placeholder:text-gray-400 text-gray-900
-                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                       transition-all duration-200
-                       hover:border-gray-400"
+              className="w-full px-3 py-2 text-sm bg-white border border-gray-300 rounded-md placeholder:text-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-gray-400"
               autoComplete="current-password"
             />
           </div>
@@ -118,12 +110,7 @@ export default function Auth() {
 
           <button
             type="submit"
-            className="w-full px-4 py-2 text-sm font-medium text-white 
-                     bg-blue-600 rounded-md 
-                     hover:bg-blue-700 
-                     focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-                     transition-all duration-200
-                     active:scale-[0.98]"
+            className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 active:scale-[0.98]"
           >
             Continuar
           </button>
