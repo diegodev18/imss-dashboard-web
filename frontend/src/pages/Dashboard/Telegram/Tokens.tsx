@@ -414,12 +414,26 @@ export default function TelegramTokensDashboard() {
           <h3 className="text-sm font-bold text-gray-900 mb-2">
             ¿Cómo usar los tokens?
           </h3>
-          <ul className="text-xs text-gray-600 space-y-1 list-disc list-inside">
+          <ol className="text-xs text-gray-600 space-y-2 list-decimal list-inside mb-3">
             <li>Crea un token y cópialo</li>
             <li>Abre el bot de Telegram de tu empresa</li>
-            <li>Usa el comando /auth seguido del token</li>
+            <li>
+              Envía el comando{" "}
+              <code className="bg-white px-1.5 py-0.5 rounded text-gray-900 font-mono">
+                /auth
+              </code>{" "}
+              seguido del token
+            </li>
             <li>El bot se vinculará automáticamente con tu cuenta</li>
-          </ul>
+          </ol>
+          <div className="bg-white p-3 rounded-lg border border-blue-300">
+            <p className="text-xs font-semibold text-gray-700 mb-2">Ejemplo:</p>
+            <div className="bg-gray-100 p-2.5 rounded border-l-4 border-blue-500">
+              <code className="text-xs font-mono text-gray-900">
+                /auth mhX9QHqsyjvY
+              </code>
+            </div>
+          </div>
         </div>
       </main>
 
