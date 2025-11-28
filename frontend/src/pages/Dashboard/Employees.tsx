@@ -1,9 +1,9 @@
-import NewUserForm from "../components/newUserForm";
+import NewUserForm from "../../components/newUserForm";
 import { useState, useEffect } from "react";
-import type { Company } from "../types";
-import type { User } from "../types/users";
+import type { Company } from "../../types";
+import type { User } from "../../types/users";
 
-export default function Dashboard() {
+export default function EmployeesDashboard() {
   const [searchValue, setSearchValue] = useState("");
   const [users, setUsers] = useState<Array<User>>([]);
   const [statusFilter, setStatusFilter] = useState<
