@@ -47,7 +47,19 @@ export default function TelegramTokensDashboard() {
 
   useEffect(() => {
     fetchSessions();
+
+    const interval = setInterval(() => {
+      fetchSessions();
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (sessions.length > 0 && sessions.every((session) => session.used)) {
+      setIsLoading(false);
+    }
+  }, [sessions]);
 
   const createToken = async () => {
     setIsCreating(true);
