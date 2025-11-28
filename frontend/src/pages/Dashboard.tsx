@@ -28,7 +28,10 @@ export default function Dashboard() {
             credentials: "include",
           }
         );
-        if (!response.ok) return;
+        if (response.status === 404) {
+          window.location.href = "/auth";
+          return;
+        }
         const data = (await response.json()) as { user: Company };
         setCompany(data.user);
       } finally {
@@ -75,6 +78,17 @@ export default function Dashboard() {
   if (company && company.status !== "active") {
     window.location.href = "/auth";
     return null;
+  }
+
+  if (!company) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-neutral-400">Cargando...</p>
+        </div>
+      </div>
+    );
   }
 
   const logout = async () => {
