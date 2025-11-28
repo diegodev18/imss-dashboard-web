@@ -104,9 +104,11 @@ export default function Auth() {
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
           <div className="mb-4">
-            <div className="inline-flex items-center justify-center w-10 h-10 mb-3 bg-linear-to-br from-blue-500 to-purple-600 rounded-lg">
-              <span className="text-lg font-bold text-white">IM</span>
-            </div>
+            <a href="/" className="inline-block">
+              <div className="inline-flex items-center justify-center w-10 h-10 mb-3 bg-linear-to-br from-blue-500 to-purple-600 rounded-lg cursor-pointer hover:opacity-80 transition-opacity">
+                <span className="text-lg font-bold text-white">IM</span>
+              </div>
+            </a>
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-1">
             Iniciar sesión

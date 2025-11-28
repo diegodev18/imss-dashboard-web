@@ -37,7 +37,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
-      <header className="fixed left-0 top-0 w-full py-3.5 bg-white/65 backdrop-blur-xs shadow-sm border-b border-zinc-200">
+      <header className="fixed left-0 top-0 z-999 w-full py-3.5 bg-white/65 backdrop-blur-xs shadow-sm border-b border-zinc-200">
         <SectionContainer className="flex justify-between items-center">
           <div className="flex items-center gap-x-2">
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
