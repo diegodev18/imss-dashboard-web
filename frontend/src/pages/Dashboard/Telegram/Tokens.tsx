@@ -16,6 +16,8 @@ export default function TelegramTokensDashboard() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [newToken, setNewToken] = useState<string | null>(null);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [tokenToDelete, setTokenToDelete] = useState<string | null>(null);
 
   const fetchSessions = async () => {
     try {
@@ -84,14 +86,22 @@ export default function TelegramTokensDashboard() {
     }
   };
 
-  const deleteToken = async (authToken: string) => {
-    if (!confirm("¿Estás seguro de que deseas eliminar este token?")) {
-      return;
-    }
+  const openDeleteDialog = (authToken: string) => {
+    setTokenToDelete(authToken);
+    setShowDeleteDialog(true);
+  };
+
+  const closeDeleteDialog = () => {
+    setShowDeleteDialog(false);
+    setTokenToDelete(null);
+  };
+
+  const confirmDeleteToken = async () => {
+    if (!tokenToDelete) return;
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/bot/session/delete/${authToken}`,
+        `${import.meta.env.VITE_API_URL}/bot/session/delete/${tokenToDelete}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -104,12 +114,14 @@ export default function TelegramTokensDashboard() {
 
       setSuccess("Token eliminado exitosamente");
       await fetchSessions();
+      closeDeleteDialog();
 
       setTimeout(() => {
         setSuccess(null);
       }, 3000);
     } catch {
       setError("Error al eliminar el token");
+      closeDeleteDialog();
     }
   };
 
@@ -290,7 +302,7 @@ export default function TelegramTokensDashboard() {
                       </td>
                       <td className="px-4 py-3 text-sm">
                         <button
-                          onClick={() => deleteToken(session.authToken)}
+                          onClick={() => openDeleteDialog(session.authToken)}
                           className="text-red-600 hover:text-red-700 text-xs font-medium"
                         >
                           Eliminar
@@ -317,6 +329,35 @@ export default function TelegramTokensDashboard() {
           </ul>
         </div>
       </main>
+
+      {/* Delete Confirmation Dialog */}
+      {showDeleteDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <h3 className="text-lg font-bold text-gray-900 mb-2">
+              Confirmar eliminación
+            </h3>
+            <p className="text-sm text-gray-600 mb-6">
+              ¿Estás seguro de que deseas eliminar este token? Esta acción no se
+              puede deshacer.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={closeDeleteDialog}
+                className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg text-sm font-medium transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={confirmDeleteToken}
+                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transition-colors"
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
