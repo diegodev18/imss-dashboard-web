@@ -155,12 +155,20 @@ export default function EmployeesDashboard() {
                 )}
               </div>
             </div>
-            <button
-              onClick={logout}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200 shadow-sm"
-            >
-              Cerrar sesión
-            </button>
+            <div className="flex items-center gap-2">
+              <a
+                href="/dashboard/telegram/tokens"
+                className="bg-white hover:bg-gray-50 text-blue-600 px-4 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200 shadow-sm border border-blue-600"
+              >
+                Tokens Telegram
+              </a>
+              <button
+                onClick={logout}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200 shadow-sm"
+              >
+                Cerrar sesión
+              </button>
+            </div>
           </div>
         </div>
       </header>

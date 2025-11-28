@@ -184,12 +184,20 @@ export default function TelegramTokensDashboard() {
                 </span>
               </div>
             </div>
-            <a
-              href="/dashboard"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200 shadow-sm"
-            >
-              Volver al Dashboard
-            </a>
+            <div className="flex items-center gap-2">
+              <a
+                href="/dashboard/employees"
+                className="bg-white hover:bg-gray-50 text-blue-600 px-4 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200 shadow-sm border border-blue-600"
+              >
+                Empleados
+              </a>
+              <a
+                href="/dashboard"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200 shadow-sm"
+              >
+                Dashboard Principal
+              </a>
+            </div>
           </div>
         </div>
       </header>
