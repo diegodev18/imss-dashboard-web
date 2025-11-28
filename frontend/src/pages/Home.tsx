@@ -148,10 +148,7 @@ export default function Home() {
               </p>
               <a
                 className="inline-flex items-center gap-x-2 bg-white text-blue-600 px-6 py-1.5 rounded-lg font-semibold text-base hover:bg-blue-50 transition-colors duration-200 shadow-lg"
-                href={
-                  pages.find((p) => p.name === "Telegram Bot")?.url ||
-                  "https://t.me/IeuImsBot"
-                }
+                href={pages.telegram.url}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -339,7 +336,7 @@ export default function Home() {
                 Enlaces Rápidos
               </h4>
               <ul className="space-y-1 text-sm">
-                {pages.map((page, idx) => (
+                {Object.values(pages).map((page, idx) => (
                   <li key={idx}>
                     <a
                       href={page.url}
