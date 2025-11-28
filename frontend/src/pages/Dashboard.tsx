@@ -135,22 +135,29 @@ export default function Dashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-neutral-900 to-neutral-800">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-neutral-900/50 backdrop-blur-sm border-b border-neutral-700/50 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <header className="fixed left-0 top-0 w-full py-3.5 bg-white/65 backdrop-blur-xs shadow-sm border-b border-zinc-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-white">Dashboard IMSS</h1>
-              {company && (
-                <p className="text-sm text-neutral-400 mt-1">
-                  {company.name || "Empresa"}
-                </p>
-              )}
+            <div className="flex items-center gap-x-2">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-base">I</span>
+              </div>
+              <div>
+                <span className="text-base font-semibold text-gray-800">
+                  Dashboard IMSS
+                </span>
+                {company && (
+                  <span className="text-xs text-gray-500 ml-2">
+                    {company.name || "Empresa"}
+                  </span>
+                )}
+              </div>
             </div>
             <button
               onClick={logout}
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200 shadow-sm"
             >
               Cerrar sesión
             </button>
@@ -158,31 +165,25 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8">
         {/* Search and Filters */}
-        <div className="bg-neutral-800/50 backdrop-blur-sm rounded-xl border border-neutral-700/50 p-6 mb-6">
-          <div className="flex flex-col sm:flex-row gap-4">
+        <div className="bg-white p-5 rounded-lg shadow-md border border-gray-100 mb-5">
+          <div className="flex flex-col sm:flex-row gap-3">
             <div className="flex-1">
-              <label className="block text-sm font-medium text-neutral-300 mb-2">
-                Buscar empleado
-              </label>
               <input
-                className="w-full bg-neutral-900/50 border border-neutral-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 px-4 py-2.5 rounded-lg focus:outline-0 transition text-white placeholder-neutral-500"
+                className="w-full bg-white border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 px-3 py-2 rounded-md focus:outline-0 transition text-gray-900 text-sm placeholder-gray-400"
                 type="text"
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
-                placeholder="Buscar por nombre..."
+                placeholder="Buscar empleado por nombre..."
               />
             </div>
-            <div className="relative sm:w-48">
-              <label className="block text-sm font-medium text-neutral-300 mb-2">
-                Filtrar por estatus
-              </label>
+            <div className="relative sm:w-40">
               <button
                 onClick={() => setShowStatusDropdown(!showStatusDropdown)}
-                className="w-full bg-neutral-900/50 border border-neutral-600 hover:border-neutral-500 px-4 py-2.5 rounded-lg cursor-pointer transition text-white text-left flex items-center justify-between"
+                className="w-full bg-white border border-gray-300 hover:border-gray-400 px-3 py-2 rounded-md cursor-pointer transition text-gray-900 text-sm text-left flex items-center justify-between"
               >
-                <span className="capitalize">
+                <span className="capitalize text-sm">
                   {statusFilter === "all"
                     ? "Todos"
                     : statusFilter === "active"
@@ -206,14 +207,14 @@ export default function Dashboard() {
                 </svg>
               </button>
               <div
-                className={`absolute w-full flex flex-col z-50 bg-neutral-800 border border-neutral-600 rounded-lg overflow-hidden mt-1 shadow-xl ${
+                className={`absolute w-full flex flex-col z-50 bg-white border border-gray-300 rounded-md overflow-hidden mt-1 shadow-lg ${
                   showStatusDropdown ? "block" : "hidden"
                 }`}
               >
                 {statuses.map((status) => (
                   <button
                     key={status}
-                    className="px-4 py-2.5 text-left hover:bg-neutral-700 cursor-pointer transition text-white capitalize"
+                    className="px-3 py-2 text-left hover:bg-gray-100 cursor-pointer transition text-gray-900 text-sm capitalize"
                     onClick={() => {
                       setStatusFilter(status as "all" | "active" | "inactive");
                       setShowStatusDropdown(false);
@@ -229,104 +230,74 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-          <div className="mt-4 flex items-center gap-2 text-sm text-neutral-400">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span>
-              {filteredUsers.length} empleado
-              {filteredUsers.length !== 1 ? "s" : ""} encontrado
-              {filteredUsers.length !== 1 ? "s" : ""}
-            </span>
+          <div className="mt-3 text-xs text-gray-500">
+            {filteredUsers.length} empleado
+            {filteredUsers.length !== 1 ? "s" : ""} encontrado
+            {filteredUsers.length !== 1 ? "s" : ""}
           </div>
         </div>
         {/* Users List */}
         {filteredUsers.length === 0 ? (
-          <div className="bg-neutral-800/50 backdrop-blur-sm rounded-xl border border-neutral-700/50 p-12 text-center">
-            <svg
-              className="w-16 h-16 text-neutral-600 mx-auto mb-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-              />
-            </svg>
-            <h3 className="text-xl font-semibold text-neutral-300 mb-2">
-              No se encontraron empleados
-            </h3>
-            <p className="text-neutral-500">
-              Intenta ajustar los filtros de búsqueda
+          <div className="bg-white p-8 rounded-lg shadow-md border border-gray-100 text-center">
+            <p className="text-sm text-gray-500">
+              No se encontraron empleados. Intenta ajustar los filtros de
+              búsqueda.
             </p>
           </div>
         ) : (
-          <div className="bg-neutral-800/50 backdrop-blur-sm rounded-xl border border-neutral-700/50 overflow-hidden">
+          <div className="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-neutral-900/50 border-b border-neutral-700">
+                <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">
                       Nombre
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">
                       CURP
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">
                       RFC
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">
                       NSS
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">
                       Puesto
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">
                       Salario
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600">
                       Estatus
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-neutral-700/50">
+                <tbody className="divide-y divide-gray-200">
                   {filteredUsers.map((user) => (
                     <tr
                       key={user.id}
-                      className="hover:bg-neutral-700/30 transition-colors"
+                      className="hover:bg-gray-50 transition-colors"
                     >
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                      <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
                         {user.full_name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-300">
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
                         {user.curp}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-300">
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
                         {user.rfc}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-300">
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
                         {user.social_security_number}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-300">
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
                         {user.position}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-300">
+                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
                         ${Number(user.salary).toLocaleString("es-MX")}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <td className="px-4 py-3 whitespace-nowrap text-sm">
                         <select
                           value={user.status}
                           onChange={(e) =>
@@ -334,11 +305,7 @@ export default function Dashboard() {
                               status: e.target.value as "active" | "inactive",
                             })
                           }
-                          className={`px-3 py-1.5 rounded-full text-xs font-semibold cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-neutral-800 transition ${
-                            user.status === "active"
-                              ? "bg-green-500/20 text-green-400 border border-green-500/30 focus:ring-green-500"
-                              : "bg-gray-500/20 text-gray-400 border border-gray-500/30 focus:ring-gray-500"
-                          }`}
+                          className="px-2 py-1 rounded text-xs font-medium cursor-pointer focus:outline-none focus:ring-1 focus:ring-blue-500 border transition bg-white text-gray-900"
                         >
                           <option value="active">Activo</option>
                           <option value="inactive">Inactivo</option>
@@ -352,7 +319,7 @@ export default function Dashboard() {
           </div>
         )}
         {/* Add New User Section */}
-        <div className="mt-6">
+        <div className="mt-5">
           <NewUserForm users={users} setUsers={setUsers} />
         </div>
       </main>
