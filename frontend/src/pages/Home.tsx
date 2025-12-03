@@ -31,7 +31,10 @@ export default function Home() {
       })
       .then(() => (window.location.href = "/dashboard"))
       .catch((err) => {
-        alert("Error al registrar la empresa: " + err.response.data.message);
+        const errorMessage =
+          err?.response?.data?.message ||
+          "Error desconocido al registrar la empresa";
+        alert("Error al registrar la empresa: " + errorMessage);
       });
   };
 
